@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.grapene": "graphene",
+        "string.h": "c"
+    }
+}
