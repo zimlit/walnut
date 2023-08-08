@@ -15,22 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with walnut.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include "mem.h"
-#include "opcode.h"
-
-typedef struct {
-    WalnutMem mem;
-    size_t pc;
-    uint64_t registers[128];
-    uint8_t wp;
-    uint16_t flags;
-    bool running;  
-} Walnut;
-
-void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen);
-void walnutFree(Walnut *walnut);
-
-void walnutRun(Walnut *walnut);
+typedef enum {
+    WalnutOpHlt,
+} WalnutOpcode;

@@ -17,37 +17,17 @@
  * along with walnut.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <walnut/walnut.h>
+#include <walnut/disassembler.h>
 #include <walnut/decode.h>
-#include <string.h>
+#include <walnut/opcode.h>
+#include <stdio.h>
 
-void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen) {
-    walnutMemInit(&walnut->mem, codeLen);
-    memcpy(walnut->mem.data, code, codeLen);
-    walnut->pc = 0;
-    memset(walnut->registers, 0, 128*8);
-    walnut->wp = 0;
-    walnut->flags = 0;
-    walnut->running = false;
-}
-
-void walnutFree(Walnut *walnut) {
-    walnutMemFree(&walnut->mem);
-    walnut->pc = 0;
-    memset(walnut->registers, 0, 128*8);
-    walnut->wp = 0;
-    walnut->flags = 0;
-}
-
-void walnutRun(Walnut *walnut) {
-    walnut->running = true;
-
-    while (walnut->running) {
-        uint64_t instruction = WALNUT_FETCH(walnut);
-        switch (WALNUT_OPCODE(instruction)) {
+void disassemble(uint64_t *code, size_t codeLen) {
+    for (int i = 0; i < codeLen; i++) {
+        printf("%04d\t", i);
+        switch (WALNUT_OPCODE(code[i])) {
             case WalnutOpHlt:
-                walnut->running = false;
-                break;
+                printf("hlt\n");
         }
     }
 }

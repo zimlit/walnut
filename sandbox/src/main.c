@@ -18,12 +18,15 @@
  */
 
 #include <walnut/walnut.h>
+#include <walnut/disassembler.h>
 #include <stddef.h>
 
 int main() {
     Walnut walnut;
-    walnutInit(&walnut, NULL, 0);
-
+    uint64_t code[] = {0};
+    disassemble(code, 1);
+    walnutInit(&walnut, code, 1);
+    walnutRun(&walnut);
     walnutFree(&walnut);
     return 0;
 }
