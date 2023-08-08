@@ -17,15 +17,12 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include "mem.h"
 
 typedef struct {
-    WalnutMem mem;
-    size_t pc;
-    uint64_t registers[128];
-    uint8_t wp;
-    uint16_t flags;  
-} Walnut;
+    uint64_t *data;
+    size_t cap;
+    size_t len;
+} WalnutMem;
 
-void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen);
-void walnutFree(Walnut *walnut);
+void walnutMemInit(WalnutMem *mem, int len);
+void walnutMemFree(WalnutMem *mem);

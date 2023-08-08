@@ -17,13 +17,17 @@
  * along with walnut.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <walnut/walnut.h>
-#include <string.h>
+#include <walnut/mem.h>
 
-void initWalnut(VM *vm, uint64_t *code) {
-    //TODO initialize main memory
-    vm->pc = 0;
-    memset(vm->registers, 0, 256*8);
-    vm->wp = 0;
-    vm->flags = 0;
+void walnutMemInit(WalnutMem *mem, int len) {
+    mem->data = malloc(len * sizeof(uint64_t));
+    mem->cap = len;
+    mem->len = len;
+}
+
+void walnutMemFree(WalnutMem *mem) {
+    free(mem->data);
+    mem->data = NULL;
+    mem->cap = 0;
+    mem->len = 0;
 }

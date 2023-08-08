@@ -18,12 +18,20 @@
  */
 
 #include <walnut/walnut.h>
-#include <stddef.h>
+#include <string.h>
 
-int main() {
-    Walnut walnut;
-    walnutInit(&walnut, NULL, 0);
+void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen) {
+    walnutMemInit(&walnut->mem, codeLen);
+    walnut->pc = 0;
+    memset(walnut->registers, 0, 128*8);
+    walnut->wp = 0;
+    walnut->flags = 0;
+}
 
-    walnutFree(&walnut);
-    return 0;
+void walnutFree(Walnut *walnut) {
+    walnutMemFree(&walnut->mem);
+    walnut->pc = 0;
+    memset(walnut->registers, 0, 128*8);
+    walnut->wp = 0;
+    walnut->flags = 0;
 }
