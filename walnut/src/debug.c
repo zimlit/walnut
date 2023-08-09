@@ -35,6 +35,12 @@ void walnutDisassemble(uint64_t *code, size_t codeLen) {
                 printf("ldi %u, %llu\n", reg, val);
                 break;
             }
+            case WalnutOpLdm: {
+                uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t off = WALNUT_SECOND_PARAM(code[i]);
+                printf("ldm %u, %u\n", dest, off);
+                break;
+            }
             case WalnutOpAdd: {
                 uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
                 uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
@@ -79,7 +85,7 @@ void walnutDumpRegisterFile(Walnut *walnut) {
     for (int wp = 0; wp < 16; wp++) {
         printf("\tWindow %2d {", wp);
         for (int i = 0; i < 16; i++) {
-            printf("r%d: %d", i, walnut->registers[i+wp*16]);
+            printf("r%d: %llX", i, walnut->registers[i+wp*16]);
             if (i != 15)
                 printf(", ");
         }

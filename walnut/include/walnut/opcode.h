@@ -23,6 +23,7 @@ typedef enum {
 
     // LOADS
     WalnutOpLdi,
+    WalnutOpLdm,
 
     // MATH
     WalnutOpAdd,

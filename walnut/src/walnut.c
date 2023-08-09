@@ -51,7 +51,13 @@ void walnutRun(Walnut *walnut) {
             case WalnutOpLdi: {
                 uint8_t reg = WALNUT_FIRST_PARAM(instruction);
                 uint64_t val = WALNUT_IMMEDIATE(instruction);
-                walnut->registers[reg+walnut->wp*16] = val;
+                WALNUT_GET_REG(walnut, reg) = val;
+                break;
+            }
+            case WalnutOpLdm: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t off = WALNUT_SECOND_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = walnut->mem.data[walnut->pc+WALNUT_GET_REG(walnut, off)];
                 break;
             }
             case WalnutOpAdd: {
