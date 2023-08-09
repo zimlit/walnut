@@ -48,17 +48,47 @@ void walnutRun(Walnut *walnut) {
             case WalnutOpHlt:
                 walnut->running = false;
                 break;
-            case WalnutOpLdi:
+            case WalnutOpLdi: {
                 uint8_t reg = WALNUT_FIRST_PARAM(instruction);
                 uint64_t val = WALNUT_IMMEDIATE(instruction);
                 walnut->registers[reg+walnut->wp*16] = val;
                 break;
-            case WalnutOpAdd:
+            }
+            case WalnutOpAdd: {
                 uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
                 uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);
                 uint8_t reg3 = WALNUT_THIRD_PARAM(instruction);
                 WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) + WALNUT_GET_REG(walnut, reg3);
                 break;
+            }
+            case WalnutOpSub: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) - WALNUT_GET_REG(walnut, reg3);
+                break;
+            }
+            case WalnutOpMul: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) * WALNUT_GET_REG(walnut, reg3);
+                break;
+            }
+            case WalnutOpDiv: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) / WALNUT_GET_REG(walnut, reg3);
+                break;
+            }
+            case WalnutOpMod: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) % WALNUT_GET_REG(walnut, reg3);
+                break;
+            }
         }
     }
 }

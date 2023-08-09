@@ -26,6 +26,10 @@ typedef enum {
 
     // MATH
     WalnutOpAdd,
+    WalnutOpSub,
+    WalnutOpMul,
+    WalnutOpDiv,
+    WalnutOpMod,
 } WalnutOpcode;
 
 #endif

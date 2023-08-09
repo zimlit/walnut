@@ -29,17 +29,47 @@ void walnutDisassemble(uint64_t *code, size_t codeLen) {
             case WalnutOpHlt:
                 printf("hlt\n");
                 break;
-            case WalnutOpLdi:
+            case WalnutOpLdi: {
                 uint8_t reg = WALNUT_FIRST_PARAM(code[i]);
                 uint64_t val = WALNUT_IMMEDIATE(code[i]);
                 printf("ldi %u, %llu\n", reg, val);
                 break;
-            case WalnutOpAdd:
+            }
+            case WalnutOpAdd: {
                 uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
                 uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
                 uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
                 printf("add %u, %u, %u\n", reg1, reg2, reg3);
                 break;
+            }
+            case WalnutOpSub: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
+                printf("sub %u, %u, %u\n", reg1, reg2, reg3);
+                break;
+            }
+            case WalnutOpMul: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
+                printf("mul %u, %u, %u\n", reg1, reg2, reg3);
+                break;
+            }
+            case WalnutOpDiv: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
+                printf("div %u, %u, %u\n", reg1, reg2, reg3);
+                break;
+            }
+            case WalnutOpMod: {
+                uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
+                printf("mod %u, %u, %u\n", reg1, reg2, reg3);
+                break;
+            }
         }
     }
 }
