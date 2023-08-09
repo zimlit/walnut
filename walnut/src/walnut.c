@@ -53,7 +53,12 @@ void walnutRun(Walnut *walnut) {
                 uint64_t val = WALNUT_IMMEDIATE(instruction);
                 walnut->registers[reg+walnut->wp*16] = val;
                 break;
+            case WalnutOpAdd:
+                uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) + WALNUT_GET_REG(walnut, reg3);
+                break;
         }
-        walnut->pc++;
     }
 }

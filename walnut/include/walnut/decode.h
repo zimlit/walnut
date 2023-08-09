@@ -18,9 +18,12 @@
 #ifndef WALNUT_DECODE_H
 #define WALNUT_DECODE_H
 
-#define WALNUT_FETCH(walnut) walnut->mem.data[walnut->pc]
+#define WALNUT_FETCH(walnut) walnut->mem.data[walnut->pc++]
 #define WALNUT_OPCODE(instruction) instruction>>56
 #define WALNUT_FIRST_PARAM(instruction) (instruction<<8)>>56
+#define WALNUT_SECOND_PARAM(instruction) (instruction<<16)>>56
+#define WALNUT_THIRD_PARAM(instruction) (instruction<<24)>>56
 #define WALNUT_IMMEDIATE(instruction) (instruction << 16)>>32
+#define WALNUT_GET_REG(walnut, reg) walnut->registers[reg+(walnut->wp*16)]
 
 #endif

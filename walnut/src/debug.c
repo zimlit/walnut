@@ -34,6 +34,12 @@ void walnutDisassemble(uint64_t *code, size_t codeLen) {
                 uint64_t val = WALNUT_IMMEDIATE(code[i]);
                 printf("ldi %u, %llu\n", reg, val);
                 break;
+            case WalnutOpAdd:
+                uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
+                uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
+                printf("add %u, %u, %u\n", reg1, reg2, reg3);
+                break;
         }
     }
 }
