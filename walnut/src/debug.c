@@ -17,17 +17,37 @@
  * along with walnut.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <walnut/disassembler.h>
+#include <walnut/debug.h>
 #include <walnut/decode.h>
 #include <walnut/opcode.h>
 #include <stdio.h>
 
-void disassemble(uint64_t *code, size_t codeLen) {
+void walnutDisassemble(uint64_t *code, size_t codeLen) {
     for (int i = 0; i < codeLen; i++) {
         printf("%04d\t", i);
         switch (WALNUT_OPCODE(code[i])) {
             case WalnutOpHlt:
                 printf("hlt\n");
+                break;
+            case WalnutOpLdi:
+                uint8_t reg = WALNUT_FIRST_PARAM(code[i]);
+                uint64_t val = WALNUT_IMMEDIATE(code[i]);
+                printf("ldi %u, %llu\n", reg, val);
+                break;
         }
     }
+}
+
+void walnutDumpRegisterFile(Walnut *walnut) {
+    printf("Register file {\n");
+    for (int wp = 0; wp < 16; wp++) {
+        printf("\tWindow %2d {", wp);
+        for (int i = 0; i < 16; i++) {
+            printf("r%d: %d", i, walnut->registers[i+wp*16]);
+            if (i != 15)
+                printf(", ");
+        }
+        printf("}\n");
+    }
+    printf("}\n");
 }

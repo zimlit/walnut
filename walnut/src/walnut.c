@@ -22,10 +22,10 @@
 #include <string.h>
 
 void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen) {
-    walnutMemInit(&walnut->mem, codeLen);
-    memcpy(walnut->mem.data, code, codeLen);
+    walnutMemInit(&walnut->mem, codeLen*8);
+    memcpy(walnut->mem.data, code, codeLen*8);
     walnut->pc = 0;
-    memset(walnut->registers, 0, 128*8);
+    memset(walnut->registers, 0, 256*8);
     walnut->wp = 0;
     walnut->flags = 0;
     walnut->running = false;
@@ -48,6 +48,12 @@ void walnutRun(Walnut *walnut) {
             case WalnutOpHlt:
                 walnut->running = false;
                 break;
+            case WalnutOpLdi:
+                uint8_t reg = WALNUT_FIRST_PARAM(instruction);
+                uint64_t val = WALNUT_IMMEDIATE(instruction);
+                walnut->registers[reg+walnut->wp*16] = val;
+                break;
         }
+        walnut->pc++;
     }
 }

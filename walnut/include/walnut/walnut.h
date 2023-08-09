@@ -21,10 +21,13 @@
 #include "mem.h"
 #include "opcode.h"
 
+#ifndef WALNUT_H
+#define WALNUT_H
+
 typedef struct {
     WalnutMem mem;
     size_t pc;
-    uint64_t registers[128];
+    uint64_t registers[256];
     uint8_t wp;
     uint16_t flags;
     bool running;  
@@ -34,3 +37,4 @@ void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen);
 void walnutFree(Walnut *walnut);
 
 void walnutRun(Walnut *walnut);
+#endif

@@ -15,7 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with walnut.  If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef WALNUT_DEBUG_H
+#define WALNUT_DEBUG_H
+
 #include <stdint.h>
 #include <stddef.h>
+#include <walnut/walnut.h>
 
-void disassemble(uint64_t *code, size_t codeLen);
+void walnutDisassemble(uint64_t *code, size_t codeLen);
+void walnutDumpRegisterFile(Walnut *walnut);
+
+#endif

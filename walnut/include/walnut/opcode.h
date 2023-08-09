@@ -15,6 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with walnut.  If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef WALNUT_OPCODE_H
+#define WALNUT_OPCODE_H
+
 typedef enum {
     WalnutOpHlt,
+    WalnutOpLdi,
 } WalnutOpcode;
+
+#endif

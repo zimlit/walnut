@@ -1,6 +1,6 @@
 add_library(
     walnut src/walnut.c include/walnut/walnut.h src/mem.c include/walnut/mem.h
-           src/disassembler.c include/walnut/disassembler.h include/walnut/decode.h
+           src/debug.c include/walnut/debug.h include/walnut/decode.h
            include/walnut/opcode.h
 )
 

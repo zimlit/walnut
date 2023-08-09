@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with walnut.  If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef WALNUT_MEM_H
+#define WALNUT_MEM_H
+
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -26,3 +29,5 @@ typedef struct {
 
 void walnutMemInit(WalnutMem *mem, int len);
 void walnutMemFree(WalnutMem *mem);
+
+#endif

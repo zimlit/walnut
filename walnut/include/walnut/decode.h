@@ -15,5 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with walnut.  If not, see <http://www.gnu.org/licenses/>.
 
-#define WALNUT_FETCH(walnut) walnut->mem.data[walnut->pc++]
+#ifndef WALNUT_DECODE_H
+#define WALNUT_DECODE_H
+
+#define WALNUT_FETCH(walnut) walnut->mem.data[walnut->pc]
 #define WALNUT_OPCODE(instruction) instruction>>56
+#define WALNUT_FIRST_PARAM(instruction) (instruction<<8)>>56
+#define WALNUT_IMMEDIATE(instruction) (instruction << 16)>>32
+
+#endif
