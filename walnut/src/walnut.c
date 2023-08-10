@@ -60,6 +60,13 @@ void walnutRun(Walnut *walnut) {
                 WALNUT_GET_REG(walnut, dest) = walnut->mem.data[walnut->pc+WALNUT_GET_REG(walnut, off)];
                 break;
             }
+            case WalnutOpLda: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t addr = WALNUT_SECOND_PARAM(instruction);
+                printf("%d", WALNUT_GET_REG(walnut, addr));
+                WALNUT_GET_REG(walnut, dest) = walnut->mem.data[WALNUT_GET_REG(walnut, addr)];
+                break;
+            }
             case WalnutOpAdd: {
                 uint8_t reg1 = WALNUT_FIRST_PARAM(instruction);
                 uint8_t reg2 = WALNUT_SECOND_PARAM(instruction);

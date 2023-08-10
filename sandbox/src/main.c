@@ -24,13 +24,14 @@
 int main() {
     Walnut walnut;
     uint64_t code[] = {
-        0x200030000000000, 
+        0x103000000020000,
+        0x300030000000000, 
         0x101000000380000, 
-        0x602000100000000,
+        0x702000100000000,
         0,
     };
-    walnutDisassemble(code, 4);
-    walnutInit(&walnut, code, 4);
+    walnutDisassemble(code, 5);
+    walnutInit(&walnut, code, 5);
     walnutRun(&walnut);
     walnutDumpRegisterFile(&walnut);
     walnutFree(&walnut);
