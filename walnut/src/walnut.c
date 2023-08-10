@@ -119,6 +119,47 @@ void walnutRun(Walnut *walnut) {
                 WALNUT_GET_REG(walnut, reg1) = WALNUT_GET_REG(walnut, reg2) % WALNUT_GET_REG(walnut, reg3);
                 break;
             }
+            case WalnutOpLbs: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t src = WALNUT_SECOND_PARAM(instruction);
+                uint8_t amm = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = WALNUT_GET_REG(walnut, src) << WALNUT_GET_REG(walnut, amm);
+                break;
+            }
+            case WalnutOpRbs: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t src = WALNUT_SECOND_PARAM(instruction);
+                uint8_t amm = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = WALNUT_GET_REG(walnut, src) >> WALNUT_GET_REG(walnut, amm);
+                break;
+            }
+            case WalnutOpAnd: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t op1 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t op2 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = WALNUT_GET_REG(walnut, op1) & WALNUT_GET_REG(walnut, op2);
+                break;
+            }
+            case WalnutOpBor: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t op1 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t op2 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = WALNUT_GET_REG(walnut, op1) | WALNUT_GET_REG(walnut, op2);
+                break;
+            }
+            case WalnutOpXor: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t op1 = WALNUT_SECOND_PARAM(instruction);
+                uint8_t op2 = WALNUT_THIRD_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = WALNUT_GET_REG(walnut, op1) ^ WALNUT_GET_REG(walnut, op2);
+                break;
+            }
+            case WalnutOpNot: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t op1 = WALNUT_SECOND_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = ~WALNUT_GET_REG(walnut, op1);
+                break;
+            }
         }
     }
 }
