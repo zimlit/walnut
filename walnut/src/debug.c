@@ -24,7 +24,7 @@
 
 void walnutDisassemble(uint64_t *code, size_t codeLen) {
     for (int i = 0; i < codeLen; i++) {
-        printf("%04d\t", i);
+        printf("%04x\t", i);
         switch (WALNUT_OPCODE(code[i])) {
             case WalnutOpHlt:
                 printf("hlt\n");
@@ -45,6 +45,24 @@ void walnutDisassemble(uint64_t *code, size_t codeLen) {
                 uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
                 uint8_t addr = WALNUT_SECOND_PARAM(code[i]);
                 printf("lda %u, %u\n", dest, addr);
+                break;
+            }
+            case WalnutOpLdr: {
+                uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t src = WALNUT_SECOND_PARAM(code[i]);
+                printf("ldr %d, %d\n", dest, src);
+                break;
+            }
+            case WalnutOpSto: {
+                uint8_t off = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t src = WALNUT_SECOND_PARAM(code[i]);
+                printf("sto %d, %d\n", off, src);
+                break;
+            }
+            case WalnutOpSta: {
+                uint8_t addr = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t src = WALNUT_SECOND_PARAM(code[i]);
+                printf("sta %d, %d\n", addr, src);
                 break;
             }
             case WalnutOpAdd: {

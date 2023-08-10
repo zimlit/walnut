@@ -63,8 +63,25 @@ void walnutRun(Walnut *walnut) {
             case WalnutOpLda: {
                 uint8_t dest = WALNUT_FIRST_PARAM(instruction);
                 uint8_t addr = WALNUT_SECOND_PARAM(instruction);
-                printf("%d", WALNUT_GET_REG(walnut, addr));
                 WALNUT_GET_REG(walnut, dest) = walnut->mem.data[WALNUT_GET_REG(walnut, addr)];
+                break;
+            }
+            case WalnutOpLdr: {
+                uint8_t dest = WALNUT_FIRST_PARAM(instruction);
+                uint8_t src = WALNUT_SECOND_PARAM(instruction);
+                WALNUT_GET_REG(walnut, dest) = WALNUT_GET_REG(walnut, src);
+                break;
+            }
+            case WalnutOpSto: {
+                uint8_t off = WALNUT_FIRST_PARAM(instruction);
+                uint8_t src = WALNUT_SECOND_PARAM(instruction);
+                walnut->mem.data[walnut->pc+WALNUT_GET_REG(walnut, off)] = WALNUT_GET_REG(walnut, src);
+                break;
+            }
+            case WalnutOpSta: {
+                uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                uint8_t src = WALNUT_SECOND_PARAM(instruction);
+                walnut->mem.data[WALNUT_GET_REG(walnut, addr)] = WALNUT_GET_REG(walnut, src);
                 break;
             }
             case WalnutOpAdd: {

@@ -20,20 +20,24 @@
 #include <walnut/walnut.h>
 #include <walnut/debug.h>
 #include <stddef.h>
+#include <stdio.h>
 
 int main() {
     Walnut walnut;
     uint64_t code[] = {
         0x103000000020000,
-        0x300030000000000, 
-        0x101000000380000, 
-        0x702000100000000,
+        0x104000000100000,
+        0x101000000380000,
+        0x100000000020000, 
+        0x902000100000000,
+        0x604020000000000,
         0,
     };
-    walnutDisassemble(code, 5);
-    walnutInit(&walnut, code, 5);
+    walnutDisassemble(code, 7);
+    walnutInit(&walnut, code, 7);
     walnutRun(&walnut);
     walnutDumpRegisterFile(&walnut);
+    printf("%llx\n", walnut.mem.data[0x10]);
     walnutFree(&walnut);
     return 0;
 }
