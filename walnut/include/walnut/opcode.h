@@ -44,7 +44,10 @@ typedef enum {
     WalnutOpAnd,
     WalnutOpBor,
     WalnutOpXor,
-    WalnutOpNot
+    WalnutOpNot,
+
+    // JUMPS
+    WalnutOpJmp,
 } WalnutOpcode;
 
 #endif

@@ -25,13 +25,10 @@
 int main() {
     Walnut walnut;
     uint64_t code[] = {
-        0x100000000340000,
-        0x101000000040000,
-        0x1102000100000000,
-        0,
+        0x1200000000000000,
     };
-    walnutDisassemble(code, 4);
-    walnutInit(&walnut, code, 4);
+    walnutDisassemble(code, 1);
+    walnutInit(&walnut, code, 1);
     walnutRun(&walnut);
     walnutDumpRegisterFile(&walnut);
     printf("%llx\n", walnut.mem.data[0x10]);

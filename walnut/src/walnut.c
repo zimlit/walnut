@@ -160,6 +160,10 @@ void walnutRun(Walnut *walnut) {
                 WALNUT_GET_REG(walnut, dest) = ~WALNUT_GET_REG(walnut, op1);
                 break;
             }
+            case WalnutOpJmp: {
+                uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                walnut->pc = WALNUT_GET_REG(walnut, addr);
+            }
         }
     }
 }

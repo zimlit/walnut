@@ -141,6 +141,11 @@ void walnutDisassemble(uint64_t *code, size_t codeLen) {
                 printf("not %d, %d\n", dest, op1);
                 break;
             }
+            case WalnutOpJmp: {
+                uint8_t addr = WALNUT_FIRST_PARAM(code[i]);
+                printf("jmp %d\n", addr);
+                break;
+            }
         }
     }
 }
