@@ -86,9 +86,23 @@ Suite *load_suite() {
   return s;
 }
 
+START_TEST(test_sto) {
+    Walnut walnut;
+    uint64_t code[] = {
+        0x500010000000000,
+    };
+    walnutInit(&walnut, code, 1);
+    walnut.registers[1] = 10;
+    walnutRun(&walnut);
+    ck_assert_int_eq(walnut.mem.data[1], 10);
+    walnutFree(&walnut);
+}
+END_TEST
+
 Suite *store_suit() {
   Suite *s = suite_create("Stores");
   TCase *tc_core = tcase_create("Core");
+  tcase_add_test(tc_core, test_sto);
   suite_add_tcase(s, tc_core);
 }
 
