@@ -48,6 +48,8 @@ typedef enum {
 
     // JUMPS
     WalnutOpJmp,
+    
+    WalnutOpCmp,
 } WalnutOpcode;
 
 #endif

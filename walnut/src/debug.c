@@ -146,6 +146,12 @@ void walnutDisassemble(uint64_t *code, size_t codeLen) {
                 printf("jmp %d\n", addr);
                 break;
             }
+            case WalnutOpCmp: {
+                uint8_t op1 = WALNUT_FIRST_PARAM(code[i]);
+                uint8_t op2 = WALNUT_SECOND_PARAM(code[i]);
+                printf("cmp %d, %d\n", op1, op2);
+                break;
+            }
         }
     }
 }
@@ -162,4 +168,5 @@ void walnutDumpRegisterFile(Walnut *walnut) {
         printf("}\n");
     }
     printf("}\n");
+    printf("Flags: %d\n", walnut->flags);
 }

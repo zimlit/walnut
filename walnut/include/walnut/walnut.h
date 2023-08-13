@@ -37,4 +37,10 @@ void walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen);
 void walnutFree(Walnut *walnut);
 
 void walnutRun(Walnut *walnut);
+
+typedef enum {
+    WALNUT_FLAG_EQUAL,
+    WALNUT_FLAG_LESS,
+    WALNUT_FLAG_GREATER
+} WalnutFlags;
 #endif

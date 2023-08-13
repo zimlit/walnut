@@ -163,6 +163,18 @@ void walnutRun(Walnut *walnut) {
             case WalnutOpJmp: {
                 uint8_t addr = WALNUT_FIRST_PARAM(instruction);
                 walnut->pc = WALNUT_GET_REG(walnut, addr);
+                break;
+            }
+            case WalnutOpCmp: {
+                uint8_t op1 = WALNUT_FIRST_PARAM(instruction);
+                uint8_t op2 = WALNUT_SECOND_PARAM(instruction);
+                int8_t res = WALNUT_GET_REG(walnut, op1) - WALNUT_GET_REG(walnut, op2);
+                if (res == 0)
+                    walnut->flags = WALNUT_FLAG_EQUAL;
+                else if (res > 0)
+                    walnut->flags = WALNUT_FLAG_LESS;
+                else if (res < 0)
+                    walnut->flags = WALNUT_FLAG_GREATER;
             }
         }
     }
