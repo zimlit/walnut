@@ -5,4 +5,9 @@ add_library(
 )
 
 set_property(TARGET walnut PROPERTY C_STANDARD 99)
+if(MSVC)
+  target_compile_options(walnut PRIVATE /W4 /WX)
+else()
+  target_compile_options(walnut PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
 target_include_directories(walnut PUBLIC include)
