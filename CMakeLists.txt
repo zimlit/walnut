@@ -6,5 +6,20 @@ project(
     LANGUAGES C
 )
 
+
 add_subdirectory(walnut)
-add_subdirectory(sandbox)
+
+include(FetchContent)
+FetchContent_Declare(Check
+    GIT_REPOSITORY https://github.com/libcheck/check
+    GIT_TAG master
+)
+
+FetchContent_MakeAvailable(Check)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif()
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+    add_subdirectory(test)
+endif()
