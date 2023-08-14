@@ -131,15 +131,41 @@ store_suit()
   return s;
 }
 
+START_TEST(test_add)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x702000100000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 10;
+  walnut.registers[1] = 5;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.registers[2], 15);
+  walnutFree(&walnut);
+}
+END_TEST
+
+Suite *
+math_suite()
+{
+  Suite *s       = suite_create("Math");
+  TCase *tc_core = tcase_create("Core");
+  tcase_add_test(tc_core, test_add);
+  suite_add_tcase(s, tc_core);
+  return s;
+}
+
 int
 main()
 {
   int numberFailed;
   Suite *ld     = load_suite();
-  SRunner *ldSr = srunner_create(ld);
-
   Suite *st     = store_suit();
+  Suite *m      = math_suite();
+  SRunner *ldSr = srunner_create(ld);
   SRunner *stSr = srunner_create(st);
+  SRunner *mSr  = srunner_create(m);
 
   srunner_run_all(ldSr, CK_NORMAL);
   numberFailed = srunner_ntests_failed(ldSr);
@@ -147,7 +173,11 @@ main()
   srunner_run_all(stSr, CK_NORMAL);
   numberFailed += srunner_ntests_failed(stSr);
 
+  srunner_run_all(mSr, CK_NORMAL);
+  numberFailed += srunner_ntests_failed(mSr);
+
   srunner_free(ldSr);
   srunner_free(stSr);
+  srunner_free(mSr);
   return (numberFailed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
