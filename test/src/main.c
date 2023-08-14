@@ -146,12 +146,76 @@ START_TEST(test_add)
 }
 END_TEST
 
+START_TEST(test_sub)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x802000100000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 10;
+  walnut.registers[1] = 5;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.registers[2], 5);
+  walnutFree(&walnut);
+}
+END_TEST
+
+START_TEST(test_mul)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x902000100000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 10;
+  walnut.registers[1] = 5;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.registers[2], 50);
+  walnutFree(&walnut);
+}
+END_TEST
+
+START_TEST(test_div)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0xA02000100000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 10;
+  walnut.registers[1] = 5;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.registers[2], 2);
+  walnutFree(&walnut);
+}
+END_TEST
+
+START_TEST(test_mod)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0xB02000100000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 10;
+  walnut.registers[1] = 4;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.registers[2], 2);
+  walnutFree(&walnut);
+}
+END_TEST
+
 Suite *
 math_suite()
 {
   Suite *s       = suite_create("Math");
   TCase *tc_core = tcase_create("Core");
   tcase_add_test(tc_core, test_add);
+  tcase_add_test(tc_core, test_sub);
+  tcase_add_test(tc_core, test_mul);
+  tcase_add_test(tc_core, test_div);
+  tcase_add_test(tc_core, test_mod);
   suite_add_tcase(s, tc_core);
   return s;
 }
