@@ -17,14 +17,15 @@
 
 #include "mem.h"
 #include "opcode.h"
-#include <stdbool.h>
 #include <inttypes.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #ifndef WALNUT_H
 #define WALNUT_H
 
-typedef struct {
+typedef struct
+{
   WalnutMem mem;
   size_t pc;
   uint64_t registers[256];
@@ -38,7 +39,8 @@ void walnutFree(Walnut *walnut);
 
 void walnutRun(Walnut *walnut);
 
-typedef enum {
+typedef enum
+{
   WALNUT_FLAG_EQUAL,
   WALNUT_FLAG_LESS,
   WALNUT_FLAG_GREATER

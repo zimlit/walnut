@@ -21,7 +21,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct {
+typedef struct
+{
   uint64_t *data;
   size_t cap;
   size_t len;

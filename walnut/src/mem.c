@@ -17,15 +17,19 @@
 
 #include <walnut/mem.h>
 
-void walnutMemInit(WalnutMem *mem, int len) {
+void
+walnutMemInit(WalnutMem *mem, int len)
+{
   mem->data = malloc(len * sizeof(uint64_t));
-  mem->cap = len;
-  mem->len = len;
+  mem->cap  = len;
+  mem->len  = len;
 }
 
-void walnutMemFree(WalnutMem *mem) {
+void
+walnutMemFree(WalnutMem *mem)
+{
   free(mem->data);
   mem->data = NULL;
-  mem->cap = 0;
-  mem->len = 0;
+  mem->cap  = 0;
+  mem->len  = 0;
 }

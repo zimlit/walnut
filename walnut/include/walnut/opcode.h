@@ -18,7 +18,8 @@
 #ifndef WALNUT_OPCODE_H
 #define WALNUT_OPCODE_H
 
-typedef enum {
+typedef enum
+{
   WalnutOpHlt,
 
   // LOADS

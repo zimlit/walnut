@@ -4,7 +4,8 @@
         "string.h": "c",
         "compare": "c",
         "cstdint": "c",
-        "format": "c"
+        "format": "c",
+        "walnut.h": "c"
     },
     "licenser.license": "LGPLv3"
 }

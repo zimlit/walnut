@@ -19,10 +19,11 @@
 #include <walnut/debug.h>
 #include <walnut/walnut.h>
 
-START_TEST(test_ldi) {
+START_TEST(test_ldi)
+{
   Walnut walnut;
   uint64_t code[] = {
-      0x100000000040000,
+    0x100000000040000,
   };
   walnutInit(&walnut, code, 1);
   walnutRun(&walnut);
@@ -31,12 +32,13 @@ START_TEST(test_ldi) {
 }
 END_TEST
 
-START_TEST(test_ldm) {
+START_TEST(test_ldm)
+{
   Walnut walnut;
   uint64_t code[] = {
-      0x200010000000000,
-      0,
-      0x3,
+    0x200010000000000,
+    0,
+    0x3,
   };
   walnutInit(&walnut, code, 3);
   walnut.registers[1] = 1;
@@ -46,12 +48,13 @@ START_TEST(test_ldm) {
 }
 END_TEST
 
-START_TEST(test_lda) {
+START_TEST(test_lda)
+{
   Walnut walnut;
   uint64_t code[] = {
-      0x300010000000000,
-      0,
-      0xA,
+    0x300010000000000,
+    0,
+    0xA,
   };
   walnutInit(&walnut, code, 3);
   walnut.registers[1] = 2;
@@ -61,10 +64,11 @@ START_TEST(test_lda) {
 }
 END_TEST
 
-START_TEST(test_ldr) {
+START_TEST(test_ldr)
+{
   Walnut walnut;
   uint64_t code[] = {
-      0x401000000000000,
+    0x401000000000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 4;
@@ -74,8 +78,10 @@ START_TEST(test_ldr) {
 }
 END_TEST
 
-Suite *load_suite() {
-  Suite *s = suite_create("Loads");
+Suite *
+load_suite()
+{
+  Suite *s       = suite_create("Loads");
   TCase *tc_core = tcase_create("Core");
   tcase_add_test(tc_core, test_ldi);
   tcase_add_test(tc_core, test_ldm);
@@ -86,33 +92,62 @@ Suite *load_suite() {
   return s;
 }
 
-START_TEST(test_sto) {
-    Walnut walnut;
-    uint64_t code[] = {
-        0x500010000000000,
-    };
-    walnutInit(&walnut, code, 1);
-    walnut.registers[1] = 10;
-    walnutRun(&walnut);
-    ck_assert_int_eq(walnut.mem.data[1], 10);
-    walnutFree(&walnut);
+START_TEST(test_sto)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x500010000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[1] = 10;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.mem.data[1], 10);
+  walnutFree(&walnut);
 }
 END_TEST
 
-Suite *store_suit() {
-  Suite *s = suite_create("Stores");
-  TCase *tc_core = tcase_create("Core");
-  tcase_add_test(tc_core, test_sto);
-  suite_add_tcase(s, tc_core);
+START_TEST(test_sta)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x600010000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[1] = 10;
+  walnut.registers[0] = 1;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.mem.data[1], 10);
+  walnutFree(&walnut);
 }
 
-int main() {
-  int numberFailed;
-  Suite *s = load_suite();
-  SRunner *sr = srunner_create(s);
+Suite *
+store_suit()
+{
+  Suite *s       = suite_create("Stores");
+  TCase *tc_core = tcase_create("Core");
+  tcase_add_test(tc_core, test_sto);
+  tcase_add_test(tc_core, test_sta);
+  suite_add_tcase(s, tc_core);
+  return s;
+}
 
-  srunner_run_all(sr, CK_NORMAL);
-  numberFailed = srunner_ntests_failed(sr);
-  srunner_free(sr);
+int
+main()
+{
+  int numberFailed;
+  Suite *ld     = load_suite();
+  SRunner *ldSr = srunner_create(ld);
+
+  Suite *st     = store_suit();
+  SRunner *stSr = srunner_create(st);
+
+  srunner_run_all(ldSr, CK_NORMAL);
+  numberFailed = srunner_ntests_failed(ldSr);
+
+  srunner_run_all(stSr, CK_NORMAL);
+  numberFailed += srunner_ntests_failed(stSr);
+
+  srunner_free(ldSr);
+  srunner_free(stSr);
   return (numberFailed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
