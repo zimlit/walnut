@@ -334,6 +334,34 @@ START_TEST(test_jeq_not_equal)
   walnutFree(&walnut);
 }
 
+START_TEST(test_jne_not_equal)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1200000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_LESS;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jne_equal)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1200000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_EQUAL;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 2);
+  walnutFree(&walnut);
+}
+
 Suite *
 jump_suite()
 {
@@ -343,6 +371,8 @@ jump_suite()
   tcase_add_test(tc_core, test_jmp);
   tcase_add_test(tc_core, test_jeq_equal);
   tcase_add_test(tc_core, test_jeq_not_equal);
+  tcase_add_test(tc_core, test_jne_not_equal);
+  tcase_add_test(tc_core, test_jne_equal);
   return s;
 }
 
