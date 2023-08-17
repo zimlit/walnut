@@ -32,27 +32,11 @@ START_TEST(test_ldi)
 }
 END_TEST
 
-START_TEST(test_ldm)
-{
-  Walnut walnut;
-  uint64_t code[] = {
-    0x200010000000000,
-    0,
-    0x3,
-  };
-  walnutInit(&walnut, code, 3);
-  walnut.registers[1] = 1;
-  walnutRun(&walnut);
-  ck_assert_uint_eq(walnut.registers[0], 3);
-  walnutFree(&walnut);
-}
-END_TEST
-
 START_TEST(test_lda)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x300010000000000,
+    0x200010000000000,
     0,
     0xA,
   };
@@ -68,7 +52,7 @@ START_TEST(test_ldr)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x401000000000000,
+    0x301000000000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 4;
@@ -84,7 +68,6 @@ load_suite()
   Suite *s       = suite_create("Loads");
   TCase *tc_core = tcase_create("Core");
   tcase_add_test(tc_core, test_ldi);
-  tcase_add_test(tc_core, test_ldm);
   tcase_add_test(tc_core, test_lda);
   tcase_add_test(tc_core, test_ldr);
   suite_add_tcase(s, tc_core);
@@ -96,7 +79,7 @@ START_TEST(test_sto)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x500010000000000,
+    0x400010000000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[1] = 10;
@@ -106,27 +89,12 @@ START_TEST(test_sto)
 }
 END_TEST
 
-START_TEST(test_sta)
-{
-  Walnut walnut;
-  uint64_t code[] = {
-    0x600010000000000,
-  };
-  walnutInit(&walnut, code, 1);
-  walnut.registers[1] = 10;
-  walnut.registers[0] = 1;
-  walnutRun(&walnut);
-  ck_assert_int_eq(walnut.mem.data[1], 10);
-  walnutFree(&walnut);
-}
-
 Suite *
 store_suit()
 {
   Suite *s       = suite_create("Stores");
   TCase *tc_core = tcase_create("Core");
   tcase_add_test(tc_core, test_sto);
-  tcase_add_test(tc_core, test_sta);
   suite_add_tcase(s, tc_core);
   return s;
 }
@@ -135,7 +103,7 @@ START_TEST(test_add)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x702000100000000,
+    0x502000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 10;
@@ -150,7 +118,7 @@ START_TEST(test_sub)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x802000100000000,
+    0x602000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 10;
@@ -165,7 +133,7 @@ START_TEST(test_mul)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x902000100000000,
+    0x702000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 10;
@@ -180,7 +148,7 @@ START_TEST(test_div)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0xA02000100000000,
+    0x802000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 10;
@@ -195,7 +163,7 @@ START_TEST(test_mod)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0xB02000100000000,
+    0x902000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 10;
@@ -224,7 +192,7 @@ START_TEST(test_lbs)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0xC00000100000000,
+    0xA00000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 2;
@@ -239,7 +207,7 @@ START_TEST(test_rbs)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0xD00000100000000,
+    0xB00000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 2;
@@ -254,7 +222,7 @@ START_TEST(test_and)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0xE00000100000000,
+    0xC00000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 3;
@@ -269,7 +237,7 @@ START_TEST(test_bor)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0xF02000100000000,
+    0xD02000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 3;
@@ -284,7 +252,7 @@ START_TEST(test_xor)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x1000000100000000,
+    0xE00000100000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 3;
@@ -299,7 +267,7 @@ START_TEST(test_not)
 {
   Walnut walnut;
   uint64_t code[] = {
-    0x1100000000000000,
+    0xF00000000000000,
   };
   walnutInit(&walnut, code, 1);
   walnut.registers[0] = 3;
@@ -323,6 +291,8 @@ bitwise_suite()
   tcase_add_test(tc_core, test_not);
   return s;
 }
+
+// TODO: test jumps & cmp
 
 int
 main()

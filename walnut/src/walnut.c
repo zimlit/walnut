@@ -61,14 +61,6 @@ walnutRun(Walnut *walnut)
             WALNUT_GET_REG(walnut, reg) = val;
             break;
           }
-        case WalnutOpLdm:
-          {
-            uint8_t dest = WALNUT_FIRST_PARAM(instruction);
-            uint8_t off  = WALNUT_SECOND_PARAM(instruction);
-            WALNUT_GET_REG(walnut, dest)
-                = walnut->mem.data[walnut->pc + WALNUT_GET_REG(walnut, off)];
-            break;
-          }
         case WalnutOpLda:
           {
             uint8_t dest = WALNUT_FIRST_PARAM(instruction);
@@ -89,14 +81,6 @@ walnutRun(Walnut *walnut)
             uint8_t off = WALNUT_FIRST_PARAM(instruction);
             uint8_t src = WALNUT_SECOND_PARAM(instruction);
             walnut->mem.data[walnut->pc + WALNUT_GET_REG(walnut, off)]
-                = WALNUT_GET_REG(walnut, src);
-            break;
-          }
-        case WalnutOpSta:
-          {
-            uint8_t addr = WALNUT_FIRST_PARAM(instruction);
-            uint8_t src  = WALNUT_SECOND_PARAM(instruction);
-            walnut->mem.data[WALNUT_GET_REG(walnut, addr)]
                 = WALNUT_GET_REG(walnut, src);
             break;
           }
@@ -201,6 +185,82 @@ walnutRun(Walnut *walnut)
           {
             uint8_t addr = WALNUT_FIRST_PARAM(instruction);
             walnut->pc   = WALNUT_GET_REG(walnut, addr);
+            break;
+          }
+        case WalnutOpJeq:
+          {
+            switch (walnut->flags)
+              {
+              case WALNUT_FLAG_EQUAL:
+                {
+                  uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                  walnut->pc   = WALNUT_GET_REG(walnut, addr);
+                  break;
+                }
+              }
+            break;
+          }
+        case WalnutOpJne:
+          {
+            if (walnut->flags != WALNUT_FLAG_EQUAL)
+              {
+                uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                walnut->pc   = WALNUT_GET_REG(walnut, addr);
+              }
+            break;
+          }
+        case WalnutOpJgt:
+          {
+            switch (walnut->flags)
+              {
+              case WALNUT_FLAG_GREATER:
+                {
+                  uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                  walnut->pc   = WALNUT_GET_REG(walnut, addr);
+                  break;
+                }
+              }
+            break;
+          }
+        case WalnutOpJlt:
+          {
+            switch (walnut->flags)
+              {
+              case WALNUT_FLAG_LESS:
+                {
+                  uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                  walnut->pc   = WALNUT_GET_REG(walnut, addr);
+                  break;
+                }
+              }
+            break;
+          }
+        case WalnutOpJge:
+          {
+            switch (walnut->flags)
+              {
+              case WALNUT_FLAG_GREATER:
+              case WALNUT_FLAG_EQUAL:
+                {
+                  uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                  walnut->pc   = WALNUT_GET_REG(walnut, addr);
+                  break;
+                }
+              }
+            break;
+          }
+        case WalnutOpJle:
+          {
+            switch (walnut->flags)
+              {
+              case WALNUT_FLAG_LESS:
+              case WALNUT_FLAG_EQUAL:
+                {
+                  uint8_t addr = WALNUT_FIRST_PARAM(instruction);
+                  walnut->pc   = WALNUT_GET_REG(walnut, addr);
+                  break;
+                }
+              }
             break;
           }
         case WalnutOpCmp:

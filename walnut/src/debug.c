@@ -38,13 +38,6 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             printf("ldi %u, %" PRIu64 "\n", reg, val);
             break;
           }
-        case WalnutOpLdm:
-          {
-            uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
-            uint8_t off  = WALNUT_SECOND_PARAM(code[i]);
-            printf("ldm %u, %u\n", dest, off);
-            break;
-          }
         case WalnutOpLda:
           {
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
@@ -64,13 +57,6 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t off = WALNUT_FIRST_PARAM(code[i]);
             uint8_t src = WALNUT_SECOND_PARAM(code[i]);
             printf("sto %d, %d\n", off, src);
-            break;
-          }
-        case WalnutOpSta:
-          {
-            uint8_t addr = WALNUT_FIRST_PARAM(code[i]);
-            uint8_t src  = WALNUT_SECOND_PARAM(code[i]);
-            printf("sta %d, %d\n", addr, src);
             break;
           }
         case WalnutOpAdd:

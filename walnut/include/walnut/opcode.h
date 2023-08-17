@@ -24,13 +24,11 @@ typedef enum
 
   // LOADS
   WalnutOpLdi,
-  WalnutOpLdm,
   WalnutOpLda,
   WalnutOpLdr,
 
   // STORES
   WalnutOpSto,
-  WalnutOpSta,
 
   // MATH
   WalnutOpAdd,
@@ -49,6 +47,12 @@ typedef enum
 
   // JUMPS
   WalnutOpJmp,
+  WalnutOpJeq,
+  WalnutOpJne,
+  WalnutOpJgt,
+  WalnutOpJlt,
+  WalnutOpJge,
+  WalnutOpJle,
 
   WalnutOpCmp,
 } WalnutOpcode;
