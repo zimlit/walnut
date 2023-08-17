@@ -292,7 +292,29 @@ bitwise_suite()
   return s;
 }
 
-// TODO: test jumps & cmp
+START_TEST(test_jmp)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1000000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+END_TEST
+
+Suite *
+jump_suite()
+{
+  Suite *s       = suite_create("Jumps");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase(s, tc_core);
+  tcase_add_test(tc_core, test_jmp);
+  return s;
+}
 
 int
 main()
@@ -302,10 +324,12 @@ main()
   Suite *st     = store_suit();
   Suite *m      = math_suite();
   Suite *b      = bitwise_suite();
+  Suite *j      = jump_suite();
   SRunner *ldSr = srunner_create(ld);
   SRunner *stSr = srunner_create(st);
   SRunner *mSr  = srunner_create(m);
   SRunner *bSr  = srunner_create(b);
+  SRunner *jSr  = srunner_create(j);
 
   srunner_run_all(ldSr, CK_NORMAL);
   numberFailed = srunner_ntests_failed(ldSr);
@@ -319,9 +343,13 @@ main()
   srunner_run_all(bSr, CK_NORMAL);
   numberFailed += srunner_ntests_failed(bSr);
 
+  srunner_run_all(jSr, CK_NORMAL);
+  numberFailed += srunner_ntests_failed(jSr);
+
   srunner_free(ldSr);
   srunner_free(stSr);
   srunner_free(mSr);
   srunner_free(bSr);
+  srunner_free(jSr);
   return (numberFailed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
