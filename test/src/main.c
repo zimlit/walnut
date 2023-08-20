@@ -418,6 +418,90 @@ START_TEST(test_jlt_not_less)
   walnutFree(&walnut);
 }
 
+START_TEST(test_jge_greater)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1500000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_GREATER;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jge_equal)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1500000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_EQUAL;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jge_false)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1500000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_LESS;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 2);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jle_less)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1600000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_LESS;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jle_equal)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1600000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_EQUAL;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jle_false)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1600000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_GREATER;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 2);
+  walnutFree(&walnut);
+}
+
 Suite *
 jump_suite()
 {
@@ -433,6 +517,12 @@ jump_suite()
   tcase_add_test(tc_core, test_jgt_not_greater);
   tcase_add_test(tc_core, test_jlt_less);
   tcase_add_test(tc_core, test_jlt_not_less);
+  tcase_add_test(tc_core, test_jge_greater);
+  tcase_add_test(tc_core, test_jge_equal);
+  tcase_add_test(tc_core, test_jge_false);
+  tcase_add_test(tc_core, test_jle_less);
+  tcase_add_test(tc_core, test_jle_equal);
+  tcase_add_test(tc_core, test_jle_false);
   return s;
 }
 
