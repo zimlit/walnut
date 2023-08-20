@@ -265,15 +265,15 @@ walnutRun(Walnut *walnut)
           }
         case WalnutOpCmp:
           {
-            uint8_t op1 = WALNUT_FIRST_PARAM(instruction);
-            uint8_t op2 = WALNUT_SECOND_PARAM(instruction);
-            int8_t res
-                = WALNUT_GET_REG(walnut, op1) - WALNUT_GET_REG(walnut, op2);
-            if (res == 0)
+            uint64_t op1
+                = WALNUT_GET_REG(walnut, WALNUT_FIRST_PARAM(instruction));
+            uint64_t op2
+                = WALNUT_GET_REG(walnut, WALNUT_SECOND_PARAM(instruction));
+            if (op1 == op2)
               walnut->flags = WALNUT_FLAG_EQUAL;
-            else if (res > 0)
+            else if (op1 < op2)
               walnut->flags = WALNUT_FLAG_LESS;
-            else if (res < 0)
+            else if (op1 > op2)
               walnut->flags = WALNUT_FLAG_GREATER;
           }
         }
