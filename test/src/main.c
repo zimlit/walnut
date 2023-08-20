@@ -362,6 +362,62 @@ START_TEST(test_jne_equal)
   walnutFree(&walnut);
 }
 
+START_TEST(test_jgt_greater)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1300000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_GREATER;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jgt_not_greater)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1300000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_LESS;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 2);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jlt_less)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1400000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_LESS;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 4);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_jlt_not_less)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1400000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[0] = 3;
+  walnut.flags        = WALNUT_FLAG_GREATER;
+  walnutRun(&walnut);
+  ck_assert_int_eq(walnut.pc, 2);
+  walnutFree(&walnut);
+}
+
 Suite *
 jump_suite()
 {
@@ -373,6 +429,10 @@ jump_suite()
   tcase_add_test(tc_core, test_jeq_not_equal);
   tcase_add_test(tc_core, test_jne_not_equal);
   tcase_add_test(tc_core, test_jne_equal);
+  tcase_add_test(tc_core, test_jgt_greater);
+  tcase_add_test(tc_core, test_jgt_not_greater);
+  tcase_add_test(tc_core, test_jlt_less);
+  tcase_add_test(tc_core, test_jlt_not_less);
   return s;
 }
 
