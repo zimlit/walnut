@@ -24,11 +24,11 @@
 typedef struct
 {
   uint64_t *data;
-  size_t cap;
   size_t len;
+  size_t codeLen;
 } WalnutMem;
 
-void walnutMemInit(WalnutMem *mem, int len);
+void walnutMemInit(WalnutMem *mem, size_t len, size_t codeLen);
 void walnutMemFree(WalnutMem *mem);
-
+uint64_t *walnutMemBrk(WalnutMem *mem, int64_t increment);
 #endif

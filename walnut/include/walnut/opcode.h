@@ -55,6 +55,9 @@ typedef enum
   WalnutOpJle,
 
   WalnutOpCmp,
+
+  // MEMORY
+  WalnutOpBrk,
 } WalnutOpcode;
 
 #endif

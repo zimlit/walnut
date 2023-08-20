@@ -580,6 +580,8 @@ misc_suite()
   return s;
 }
 
+// TODO test WalnutMem
+
 int
 main()
 {

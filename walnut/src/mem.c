@@ -15,21 +15,45 @@
  * along with walnut. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
 #include <walnut/mem.h>
 
 void
-walnutMemInit(WalnutMem *mem, int len)
+walnutMemInit(WalnutMem *mem, size_t len, size_t codeLen)
 {
-  mem->data = malloc(len * sizeof(uint64_t));
-  mem->cap  = len;
-  mem->len  = len;
+  mem->data    = malloc(len * 8);
+  mem->len     = len;
+  mem->codeLen = codeLen;
 }
 
 void
 walnutMemFree(WalnutMem *mem)
 {
   free(mem->data);
-  mem->data = NULL;
-  mem->cap  = 0;
-  mem->len  = 0;
+  mem->data    = NULL;
+  mem->len     = 0;
+  mem->codeLen = 0;
+}
+
+uint64_t *
+walnutMemBrk(WalnutMem *mem, int64_t inc)
+{
+  if (inc == 0)
+    {
+      return mem->data + mem->len - 1;
+    }
+  if (mem->len - inc < mem->codeLen)
+    {
+      fprintf(stderr, "ERROR: attempted to resize heap to size to small to "
+                      "hold text segment");
+      exit(EXIT_FAILURE);
+    }
+  mem->data = realloc(mem->data, (mem->len + inc) * 8);
+  if (!mem->data)
+    {
+      fprintf(stderr, "ERROR: out of memory");
+      exit(1);
+    }
+
+  return mem->data - mem->len - 1;
 }
