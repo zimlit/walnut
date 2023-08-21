@@ -21,6 +21,13 @@
 void
 walnutMemInit(WalnutMem *mem, size_t len, size_t codeLen)
 {
+  if (len < codeLen)
+    {
+      fprintf(
+          stderr,
+          "ERROR: length must be >= than the length of the text segment\n");
+      exit(EXIT_FAILURE);
+    }
   mem->data    = malloc(len * 8);
   mem->len     = len;
   mem->codeLen = codeLen;
@@ -42,10 +49,10 @@ walnutMemBrk(WalnutMem *mem, int64_t inc)
     {
       return mem->data + mem->len - 1;
     }
-  if (mem->len - inc < mem->codeLen)
+  if (mem->len + inc < mem->codeLen)
     {
       fprintf(stderr, "ERROR: attempted to resize heap to size to small to "
-                      "hold text segment");
+                      "hold text segment\n");
       exit(EXIT_FAILURE);
     }
   mem->data = realloc(mem->data, (mem->len + inc) * 8);
@@ -55,5 +62,6 @@ walnutMemBrk(WalnutMem *mem, int64_t inc)
       exit(1);
     }
 
-  return mem->data - mem->len - 1;
+  mem->len += inc;
+  return mem->data + mem->len - 1;
 }

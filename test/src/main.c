@@ -583,12 +583,53 @@ misc_suite()
 START_TEST(test_walnutMemInit)
 {
   WalnutMem mem;
-  walnutMemInit(&mem, 1024, 0);
+  walnutMemInit(&mem, 1024 / 8 + 1, 1);
   ck_assert_ptr_nonnull(mem.data);
-  ck_assert_uint_eq(mem.len, 1024);
-  ck_assert_uint_eq(mem.codeLen, 0);
-  mem.data[1023] = 4;
-  ck_assert_uint_eq(mem.data[1023], 4);
+  ck_assert_uint_eq(mem.len, 1024 / 8 + 1);
+  ck_assert_uint_eq(mem.codeLen, 1);
+  mem.data[1024] = 4;
+  ck_assert_uint_eq(mem.data[1024], 4);
+  walnutMemFree(&mem);
+}
+
+START_TEST(test_walnutMemInit_len_less_than_codeLen)
+{
+  WalnutMem mem;
+  walnutMemInit(&mem, 1, 3);
+  walnutMemFree(&mem);
+}
+
+START_TEST(test_walnutMemBrk_increase)
+{
+  WalnutMem mem;
+  walnutMemInit(&mem, 0, 0);
+  uint64_t *top = walnutMemBrk(&mem, 5);
+  ck_assert_ptr_nonnull(mem.data);
+  ck_assert_uint_eq(mem.len, 5);
+  ck_assert_ptr_eq(top, mem.data + 4);
+  mem.data[4] = 4;
+  ck_assert_uint_eq(mem.data[4], 4);
+  walnutMemFree(&mem);
+}
+
+START_TEST(test_walnutMemBrk_decrease)
+{
+  WalnutMem mem;
+  walnutMemInit(&mem, 5, 0);
+  uint64_t *top = walnutMemBrk(&mem, -2);
+  ck_assert_ptr_nonnull(mem.data);
+  ck_assert_uint_eq(mem.len, 3);
+  ck_assert_ptr_eq(top, mem.data + 2);
+  mem.data[2] = 4;
+  ck_assert_uint_eq(mem.data[2], 4);
+  walnutMemFree(&mem);
+}
+
+START_TEST(test_walnutMemBrk_resize_smaller_than_text_segment)
+{
+  WalnutMem mem;
+  walnutMemInit(&mem, 5, 4);
+  uint64_t *top = walnutMemBrk(&mem, -2);
   walnutMemFree(&mem);
 }
 
@@ -599,6 +640,13 @@ WalnutMem_suite()
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase(s, tc_core);
   tcase_add_test(tc_core, test_walnutMemInit);
+  tcase_add_exit_test(tc_core, test_walnutMemInit_len_less_than_codeLen,
+                      EXIT_FAILURE);
+  tcase_add_test(tc_core, test_walnutMemBrk_increase);
+  tcase_add_test(tc_core, test_walnutMemBrk_decrease);
+  tcase_add_exit_test(tc_core,
+                      test_walnutMemBrk_resize_smaller_than_text_segment,
+                      EXIT_FAILURE);
   return s;
 }
 
