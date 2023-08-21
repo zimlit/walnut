@@ -23,7 +23,7 @@ void
 walnutInit(Walnut *walnut, uint64_t *code, size_t codeLen)
 {
   walnutMemInit(&walnut->mem, codeLen + 1024 / 8, codeLen);
-  memcpy(walnut->mem.data, code, codeLen);
+  memcpy(walnut->mem.data, code, codeLen * 8);
   walnut->pc = 0;
   memset(walnut->registers, 0, 256 * 8);
   walnut->wp      = 0;

@@ -580,7 +580,27 @@ misc_suite()
   return s;
 }
 
-// TODO test WalnutMem
+START_TEST(test_walnutMemInit)
+{
+  WalnutMem mem;
+  walnutMemInit(&mem, 1024, 0);
+  ck_assert_ptr_nonnull(mem.data);
+  ck_assert_uint_eq(mem.len, 1024);
+  ck_assert_uint_eq(mem.codeLen, 0);
+  mem.data[1023] = 4;
+  ck_assert_uint_eq(mem.data[1023], 4);
+  walnutMemFree(&mem);
+}
+
+Suite *
+WalnutMem_suite()
+{
+  Suite *s       = suite_create("WalnutMem");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase(s, tc_core);
+  tcase_add_test(tc_core, test_walnutMemInit);
+  return s;
+}
 
 int
 main()
@@ -592,12 +612,14 @@ main()
   Suite *b      = bitwise_suite();
   Suite *j      = jump_suite();
   Suite *mi     = misc_suite();
+  Suite *wm     = WalnutMem_suite();
   SRunner *ldSr = srunner_create(ld);
   SRunner *stSr = srunner_create(st);
   SRunner *mSr  = srunner_create(m);
   SRunner *bSr  = srunner_create(b);
   SRunner *jSr  = srunner_create(j);
   SRunner *miSr = srunner_create(mi);
+  SRunner *wmSr = srunner_create(wm);
 
   srunner_run_all(ldSr, CK_NORMAL);
   numberFailed = srunner_ntests_failed(ldSr);
@@ -616,6 +638,9 @@ main()
 
   srunner_run_all(miSr, CK_NORMAL);
   numberFailed += srunner_ntests_failed(miSr);
+
+  srunner_run_all(wmSr, CK_NORMAL);
+  numberFailed += srunner_ntests_failed(wmSr);
 
   srunner_free(ldSr);
   srunner_free(stSr);
