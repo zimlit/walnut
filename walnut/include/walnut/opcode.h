@@ -58,6 +58,10 @@ typedef enum
 
   // MEMORY
   WalnutOpBrk,
+
+  // WINDOW MANIPULATION
+  WalnutOpIwp,
+  WalnutOpDwp,
 } WalnutOpcode;
 
 #endif

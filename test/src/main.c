@@ -679,6 +679,42 @@ WalnutMem_suite()
   return s;
 }
 
+START_TEST(test_iwp)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1900000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnutRun(&walnut);
+  ck_assert_uint_eq(walnut.wp, 1);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_dwp)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1A00000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.wp = 2;
+  walnutRun(&walnut);
+  ck_assert_uint_eq(walnut.wp, 1);
+  walnutFree(&walnut);
+}
+
+Suite *
+register_window_suite()
+{
+  Suite *s       = suite_create("Register Windows");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase(s, tc_core);
+  tcase_add_test(tc_core, test_iwp);
+  tcase_add_test(tc_core, test_dwp);
+  return s;
+}
+
 int
 main()
 {
@@ -690,6 +726,7 @@ main()
   Suite *j      = jump_suite();
   Suite *mi     = misc_suite();
   Suite *wm     = WalnutMem_suite();
+  Suite *w      = register_window_suite();
   SRunner *ldSr = srunner_create(ld);
   SRunner *stSr = srunner_create(st);
   SRunner *mSr  = srunner_create(m);
@@ -697,6 +734,7 @@ main()
   SRunner *jSr  = srunner_create(j);
   SRunner *miSr = srunner_create(mi);
   SRunner *wmSr = srunner_create(wm);
+  SRunner *wSr  = srunner_create(w);
 
   srunner_run_all(ldSr, CK_NORMAL);
   numberFailed = srunner_ntests_failed(ldSr);
@@ -719,11 +757,15 @@ main()
   srunner_run_all(wmSr, CK_NORMAL);
   numberFailed += srunner_ntests_failed(wmSr);
 
+  srunner_run_all(wSr, CK_NORMAL);
+  numberFailed += srunner_ntests_failed(wSr);
+
   srunner_free(ldSr);
   srunner_free(stSr);
   srunner_free(mSr);
   srunner_free(bSr);
   srunner_free(jSr);
   srunner_free(miSr);
+  srunner_free(wSr);
   return (numberFailed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

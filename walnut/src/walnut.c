@@ -285,6 +285,16 @@ walnutRun(Walnut *walnut)
                 &walnut->mem, (int64_t)WALNUT_GET_REG(walnut, inc));
             break;
           }
+        case WalnutOpIwp:
+          {
+            walnut->wp++;
+            break;
+          }
+        case WalnutOpDwp:
+          {
+            walnut->wp--;
+            break;
+          }
         }
     }
 }
