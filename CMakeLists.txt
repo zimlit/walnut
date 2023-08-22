@@ -8,6 +8,7 @@ project(
 
 
 add_subdirectory(walnut)
+add_subdirectory(walnutApp)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
