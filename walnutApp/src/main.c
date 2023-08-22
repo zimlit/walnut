@@ -17,6 +17,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <walnut/debug.h>
 #include <walnut/walnut.h>
 
 typedef struct
@@ -59,11 +60,14 @@ readfile(const char *fileName)
       fread(temp, 1, len, fd);
       for (int i = 0; i < len / 8; i++)
         {
-          file.contents[i]
-              = (uint64_t)temp[7] | (uint64_t)temp[6] << 8
-                | (uint64_t)temp[5] << 16 | (uint64_t)temp[4] << 24
-                | (uint64_t)temp[3] << 32 | (uint64_t)temp[2] << 40
-                | (uint64_t)temp[1] << 48 | (uint64_t)temp[0] << 56;
+          file.contents[i] = (uint64_t)temp[i * 8 + 7]
+                             | (uint64_t)temp[i * 8 + 6] << 8
+                             | (uint64_t)temp[i * 8 + 5] << 16
+                             | (uint64_t)temp[i * 8 + 4] << 24
+                             | (uint64_t)temp[i * 8 + 3] << 32
+                             | (uint64_t)temp[i * 8 + 2] << 40
+                             | (uint64_t)temp[i * 8 + 1] << 48
+                             | (uint64_t)temp[i * 8 + 0] << 56;
         }
       free(temp);
     }
@@ -85,8 +89,12 @@ main(int argc, const char **argv)
       return EXIT_FAILURE;
     }
   File file = readfile(argv[1]);
-  printf("%lu\n", file.len);
-  printf("%lx\n", file.contents[0]);
+  Walnut walnut;
+  walnutInit(&walnut, file.contents, file.len);
+  walnutDisassemble(file.contents, file.len);
+  walnutRun(&walnut);
+  walnutDumpRegisterFile(&walnut);
+  walnutFree(&walnut);
 
   free(file.contents);
   return 0;
