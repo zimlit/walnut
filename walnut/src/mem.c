@@ -42,12 +42,12 @@ walnutMemFree(WalnutMem *mem)
   mem->codeLen = 0;
 }
 
-uint64_t *
+uint64_t
 walnutMemBrk(WalnutMem *mem, int64_t inc)
 {
   if (inc == 0)
     {
-      return mem->data + mem->len - 1;
+      return mem->len - 1;
     }
   if (mem->len + inc < mem->codeLen)
     {
@@ -61,7 +61,11 @@ walnutMemBrk(WalnutMem *mem, int64_t inc)
       fprintf(stderr, "ERROR: out of memory");
       exit(1);
     }
-
+  uint64_t oldTop;
+  if (mem->len == 0)
+    oldTop = 0;
+  else
+    oldTop = mem->len - 1;
   mem->len += inc;
-  return mem->data + mem->len - 1;
+  return oldTop;
 }

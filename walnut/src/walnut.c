@@ -275,13 +275,15 @@ walnutRun(Walnut *walnut)
               walnut->flags = WALNUT_FLAG_LESS;
             else if (op1 > op2)
               walnut->flags = WALNUT_FLAG_GREATER;
+            break;
           }
         case WalnutOpBrk:
           {
             uint64_t dest                = WALNUT_FIRST_PARAM(instruction);
             uint64_t inc                 = WALNUT_SECOND_PARAM(instruction);
-            WALNUT_GET_REG(walnut, dest) = walnutMemBrk(
+            WALNUT_GET_REG(walnut, dest) = (uint64_t)walnutMemBrk(
                 &walnut->mem, (int64_t)WALNUT_GET_REG(walnut, inc));
+            break;
           }
         }
     }

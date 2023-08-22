@@ -568,6 +568,34 @@ START_TEST(test_cmp_less)
   walnutFree(&walnut);
 }
 
+START_TEST(test_brk_increase)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1800010000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[1] = 5;
+  walnutRun(&walnut);
+  ck_assert_uint_eq(walnut.registers[0], 128);
+  ck_assert_uint_eq(walnut.mem.len, 134);
+  walnutFree(&walnut);
+}
+
+START_TEST(test_brk_decrease)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1800010000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[1] = -5;
+  walnutRun(&walnut);
+  ck_assert_uint_eq(walnut.registers[0], 128);
+  ck_assert_uint_eq(walnut.mem.len, 124);
+  walnutFree(&walnut);
+}
+
 Suite *
 misc_suite()
 {
@@ -577,6 +605,8 @@ misc_suite()
   tcase_add_test(tc_core, test_cmp_equal);
   tcase_add_test(tc_core, test_cmp_greater);
   tcase_add_test(tc_core, test_cmp_less);
+  tcase_add_test(tc_core, test_brk_increase);
+  tcase_add_test(tc_core, test_brk_decrease);
   return s;
 }
 
@@ -603,10 +633,9 @@ START_TEST(test_walnutMemBrk_increase)
 {
   WalnutMem mem;
   walnutMemInit(&mem, 0, 0);
-  uint64_t *top = walnutMemBrk(&mem, 5);
+  uint64_t top = walnutMemBrk(&mem, 5);
   ck_assert_ptr_nonnull(mem.data);
   ck_assert_uint_eq(mem.len, 5);
-  ck_assert_ptr_eq(top, mem.data + 4);
   mem.data[4] = 4;
   ck_assert_uint_eq(mem.data[4], 4);
   walnutMemFree(&mem);
@@ -616,10 +645,10 @@ START_TEST(test_walnutMemBrk_decrease)
 {
   WalnutMem mem;
   walnutMemInit(&mem, 5, 0);
-  uint64_t *top = walnutMemBrk(&mem, -2);
+  uint64_t top = walnutMemBrk(&mem, -2);
   ck_assert_ptr_nonnull(mem.data);
   ck_assert_uint_eq(mem.len, 3);
-  ck_assert_ptr_eq(top, mem.data + 2);
+  ck_assert_uint_eq(top, 4);
   mem.data[2] = 4;
   ck_assert_uint_eq(mem.data[2], 4);
   walnutMemFree(&mem);
@@ -629,7 +658,7 @@ START_TEST(test_walnutMemBrk_resize_smaller_than_text_segment)
 {
   WalnutMem mem;
   walnutMemInit(&mem, 5, 4);
-  uint64_t *top = walnutMemBrk(&mem, -2);
+  uint64_t top = walnutMemBrk(&mem, -2);
   walnutMemFree(&mem);
 }
 
