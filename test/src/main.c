@@ -319,6 +319,7 @@ START_TEST(test_jeq_equal)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jeq_not_equal)
 {
@@ -333,6 +334,7 @@ START_TEST(test_jeq_not_equal)
   ck_assert_uint_eq(walnut.pc, 2);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jne_not_equal)
 {
@@ -347,6 +349,7 @@ START_TEST(test_jne_not_equal)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jne_equal)
 {
@@ -361,6 +364,7 @@ START_TEST(test_jne_equal)
   ck_assert_uint_eq(walnut.pc, 2);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jgt_greater)
 {
@@ -375,6 +379,7 @@ START_TEST(test_jgt_greater)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jgt_not_greater)
 {
@@ -389,6 +394,7 @@ START_TEST(test_jgt_not_greater)
   ck_assert_uint_eq(walnut.pc, 2);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jlt_less)
 {
@@ -403,6 +409,7 @@ START_TEST(test_jlt_less)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jlt_not_less)
 {
@@ -417,6 +424,7 @@ START_TEST(test_jlt_not_less)
   ck_assert_uint_eq(walnut.pc, 2);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jge_greater)
 {
@@ -431,6 +439,7 @@ START_TEST(test_jge_greater)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jge_equal)
 {
@@ -445,6 +454,7 @@ START_TEST(test_jge_equal)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jge_false)
 {
@@ -459,6 +469,7 @@ START_TEST(test_jge_false)
   ck_assert_uint_eq(walnut.pc, 2);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jle_less)
 {
@@ -473,6 +484,7 @@ START_TEST(test_jle_less)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jle_equal)
 {
@@ -487,6 +499,7 @@ START_TEST(test_jle_equal)
   ck_assert_uint_eq(walnut.pc, 4);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_jle_false)
 {
@@ -501,6 +514,7 @@ START_TEST(test_jle_false)
   ck_assert_uint_eq(walnut.pc, 2);
   walnutFree(&walnut);
 }
+END_TEST
 
 Suite *
 jump_suite()
@@ -539,6 +553,7 @@ START_TEST(test_cmp_equal)
   ck_assert_uint_eq(walnut.flags, WALNUT_FLAG_EQUAL);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_cmp_greater)
 {
@@ -553,6 +568,7 @@ START_TEST(test_cmp_greater)
   ck_assert_uint_eq(walnut.flags, WALNUT_FLAG_GREATER);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_cmp_less)
 {
@@ -567,6 +583,7 @@ START_TEST(test_cmp_less)
   ck_assert_uint_eq(walnut.flags, WALNUT_FLAG_LESS);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_brk_increase)
 {
@@ -581,6 +598,7 @@ START_TEST(test_brk_increase)
   ck_assert_uint_eq(walnut.mem.len, 134);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_brk_decrease)
 {
@@ -595,6 +613,7 @@ START_TEST(test_brk_decrease)
   ck_assert_uint_eq(walnut.mem.len, 124);
   walnutFree(&walnut);
 }
+END_TEST
 
 Suite *
 misc_suite()
@@ -621,6 +640,7 @@ START_TEST(test_walnutMemInit)
   ck_assert_uint_eq(mem.data[1024], 4);
   walnutMemFree(&mem);
 }
+END_TEST
 
 START_TEST(test_walnutMemInit_len_less_than_codeLen)
 {
@@ -628,6 +648,7 @@ START_TEST(test_walnutMemInit_len_less_than_codeLen)
   walnutMemInit(&mem, 1, 3);
   walnutMemFree(&mem);
 }
+END_TEST
 
 START_TEST(test_walnutMemBrk_increase)
 {
@@ -640,6 +661,7 @@ START_TEST(test_walnutMemBrk_increase)
   ck_assert_uint_eq(mem.data[4], 4);
   walnutMemFree(&mem);
 }
+END_TEST
 
 START_TEST(test_walnutMemBrk_decrease)
 {
@@ -653,6 +675,7 @@ START_TEST(test_walnutMemBrk_decrease)
   ck_assert_uint_eq(mem.data[2], 4);
   walnutMemFree(&mem);
 }
+END_TEST
 
 START_TEST(test_walnutMemBrk_resize_smaller_than_text_segment)
 {
@@ -661,6 +684,7 @@ START_TEST(test_walnutMemBrk_resize_smaller_than_text_segment)
   uint64_t top = walnutMemBrk(&mem, -2);
   walnutMemFree(&mem);
 }
+END_TEST
 
 Suite *
 WalnutMem_suite()
@@ -690,6 +714,7 @@ START_TEST(test_iwp)
   ck_assert_uint_eq(walnut.wp, 1);
   walnutFree(&walnut);
 }
+END_TEST
 
 START_TEST(test_dwp)
 {
@@ -703,6 +728,7 @@ START_TEST(test_dwp)
   ck_assert_uint_eq(walnut.wp, 1);
   walnutFree(&walnut);
 }
+END_TEST
 
 Suite *
 register_window_suite()
@@ -712,6 +738,47 @@ register_window_suite()
   suite_add_tcase(s, tc_core);
   tcase_add_test(tc_core, test_iwp);
   tcase_add_test(tc_core, test_dwp);
+  return s;
+}
+
+START_TEST(test_jsr)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1B00000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[16] = 100;
+  walnut.wp++;
+  walnutRun(&walnut);
+  ck_assert_uint_eq(walnut.pc, 101);
+  ck_assert_uint_eq(walnut.registers[15], 1);
+  walnutFree(&walnut);
+}
+END_TEST
+
+START_TEST(test_ret)
+{
+  Walnut walnut;
+  uint64_t code[] = {
+    0x1C00000000000000,
+  };
+  walnutInit(&walnut, code, 1);
+  walnut.registers[15] = 100;
+  walnutRun(&walnut);
+  ck_assert_uint_eq(walnut.pc, 101);
+  walnutFree(&walnut);
+}
+END_TEST
+
+Suite *
+subroutine_suite()
+{
+  Suite *s       = suite_create("Subroutine");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase(s, tc_core);
+  tcase_add_test(tc_core, test_jsr);
+  tcase_add_test(tc_core, test_ret);
   return s;
 }
 
@@ -727,6 +794,7 @@ main()
   Suite *mi     = misc_suite();
   Suite *wm     = WalnutMem_suite();
   Suite *w      = register_window_suite();
+  Suite *s      = subroutine_suite();
   SRunner *ldSr = srunner_create(ld);
   SRunner *stSr = srunner_create(st);
   SRunner *mSr  = srunner_create(m);
@@ -735,6 +803,7 @@ main()
   SRunner *miSr = srunner_create(mi);
   SRunner *wmSr = srunner_create(wm);
   SRunner *wSr  = srunner_create(w);
+  SRunner *sSr  = srunner_create(s);
 
   srunner_run_all(ldSr, CK_NORMAL);
   numberFailed = srunner_ntests_failed(ldSr);
@@ -760,6 +829,9 @@ main()
   srunner_run_all(wSr, CK_NORMAL);
   numberFailed += srunner_ntests_failed(wSr);
 
+  srunner_run_all(sSr, CK_NORMAL);
+  numberFailed += srunner_ntests_failed(sSr);
+
   srunner_free(ldSr);
   srunner_free(stSr);
   srunner_free(mSr);
@@ -767,5 +839,6 @@ main()
   srunner_free(jSr);
   srunner_free(miSr);
   srunner_free(wSr);
+  srunner_free(sSr);
   return (numberFailed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

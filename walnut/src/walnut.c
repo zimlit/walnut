@@ -295,6 +295,19 @@ walnutRun(Walnut *walnut)
             walnut->wp--;
             break;
           }
+        case WalnutOpJsr:
+          {
+            uint64_t subroutine_addr
+                = WALNUT_GET_REG(walnut, WALNUT_FIRST_PARAM(instruction));
+            walnut->registers[15 + ((walnut->wp - 1) * 16)] = walnut->pc;
+            walnut->pc                                      = subroutine_addr;
+            break;
+          }
+        case WalnutOpRet:
+          {
+            walnut->pc = WALNUT_GET_REG(walnut, 15);
+            break;
+          }
         }
     }
 }

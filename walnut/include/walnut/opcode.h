@@ -62,6 +62,10 @@ typedef enum
   // WINDOW MANIPULATION
   WalnutOpIwp,
   WalnutOpDwp,
+
+  // subroutines
+  WalnutOpJsr,
+  WalnutOpRet,
 } WalnutOpcode;
 
 #endif
