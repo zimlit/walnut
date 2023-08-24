@@ -21,6 +21,93 @@
 #include <walnut/assembler/assembler.h>
 #include <walnut/opcode.h>
 
+typedef enum
+{
+  TOKEN_HLT,
+  TOKEN_LDI,
+
+  TOKEN_REG,
+  TOKEN_NUMBER,
+  TOKEN_COMMA,
+
+  TOKEN_ERROR,
+  TOKEN_EOF,
+} TokenType;
+
+typedef struct
+{
+  TokenType type;
+  int line;
+  int col;
+  char *start;
+  char *end;
+} Token;
+
+typedef struct
+{
+  int line;
+  int col;
+  int pos;
+  const char *source;
+} Lexer;
+
+void
+initLexer(Lexer *lexer, const char *source)
+{
+  lexer->line   = 1;
+  lexer->col    = 1;
+  lexer->pos    = 0;
+  lexer->source = source;
+}
+
+Token
+lexToken(Lexer *lexer)
+{
+  Token tok;
+  tok.line = lexer->line;
+  tok.col  = lexer->col;
+  while (isspace(lexer->source[lexer->pos]))
+    {
+      lexer->pos++;
+      lexer->col++;
+      if (lexer->source[lexer->pos] == '\n')
+        {
+          lexer->line++;
+          lexer->col = 0;
+        }
+    }
+
+  char c = lexer->source[lexer->pos];
+  if (c == ',')
+    {
+      tok.type  = TOKEN_COMMA;
+      tok.start = lexer->source + lexer->pos;
+      tok.end   = tok.start;
+      lexer->pos++;
+      lexer->col++;
+      return tok;
+    }
+  else if (c == '\0')
+    {
+      tok.type  = TOKEN_EOF;
+      tok.start = lexer->source + lexer->pos;
+      tok.end   = tok.start;
+      lexer->pos++;
+      lexer->col++;
+    }
+  else
+    {
+      // TODO log error
+      tok.type  = TOKEN_ERROR;
+      tok.start = lexer->source + lexer->pos;
+      tok.end   = tok.start;
+      lexer->pos++;
+      lexer->col++;
+    }
+
+  return tok;
+}
+
 void
 walnutAssemblerOutputInit(WalnutAssemblerOutput *output)
 {
