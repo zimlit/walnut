@@ -17,6 +17,8 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+#include <walnut/assembler/assembler.h>
 #include <walnut/debug.h>
 #include <walnut/walnut.h>
 
@@ -80,22 +82,63 @@ readfile(const char *fileName)
   return file;
 }
 
+char *
+readTextFile(const char *fileName)
+{
+  FILE *fd = fopen(fileName, "r");
+  if (!fd)
+    {
+      fprintf(stderr, "ERROR: cannot open file for reading: %s\n", fileName);
+      exit(EXIT_FAILURE);
+    }
+  fseek(fd, 0, SEEK_END);
+  long len = ftell(fd);
+  rewind(fd);
+
+  char *contents = malloc(len + 1);
+  if (!contents)
+    {
+      fprintf(stderr, "ERROR: cannot allocate space for file\n");
+      exit(EXIT_FAILURE);
+    }
+  fread(contents, 1, len, fd);
+
+  fclose(fd);
+  contents[len] = '\0';
+  return contents;
+}
+
 int
 main(int argc, const char **argv)
 {
-  if (argc != 2)
+  if (argc < 2)
     {
-      fprintf(stderr, "Usage: walnut [path]\n");
+      fprintf(stderr, "not enough arguments\n");
       return EXIT_FAILURE;
     }
-  File file = readfile(argv[1]);
-  Walnut walnut;
-  walnutInit(&walnut, file.contents, file.len);
-  walnutDisassemble(file.contents, file.len);
-  walnutRun(&walnut);
-  walnutDumpRegisterFile(&walnut);
-  walnutFree(&walnut);
+  if (strncmp(argv[1], "asm", 3) == 0)
+    {
+      if (argc != 3)
+        {
+          fprintf(stderr, "wrong number of arguments\n");
+          return EXIT_FAILURE;
+        }
+      char *file                   = readTextFile(argv[2]);
+      WalnutAssemblerOutput output = walnutAssemble(file);
+      printf("%016lx\n%016lx\n", output.data[0], output.data[1]);
+      walnutAssemblerOutputFree(&output);
+    }
+  else
+    {
+      File file = readfile(argv[1]);
+      Walnut walnut;
+      walnutInit(&walnut, file.contents, file.len);
+      walnutDisassemble(file.contents, file.len);
+      walnutRun(&walnut);
+      walnutDumpRegisterFile(&walnut);
+      walnutFree(&walnut);
 
-  free(file.contents);
+      free(file.contents);
+    }
   return 0;
 }

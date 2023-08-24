@@ -15,8 +15,11 @@
  * along with walnut. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <walnut/assembler/assembler.h>
+#include <walnut/opcode.h>
 
 void
 walnutAssemblerOutputInit(WalnutAssemblerOutput *output)
@@ -31,7 +34,7 @@ walnutAssemblerOutputPush(WalnutAssemblerOutput *output, uint64_t item)
 {
   if (output->len + 1 > output->cap)
     {
-      output->cap  = output->cap ? output->cap * 2 : 8;
+      output->cap  = output->cap ? output->cap * 2 : 64;
       output->data = realloc(output->data, output->cap);
     }
   output->data[output->len] = item;
@@ -45,6 +48,7 @@ walnutAssemblerOutputFree(WalnutAssemblerOutput *output)
   walnutAssemblerOutputInit(output);
 }
 
+// TODO: error handling
 WalnutAssemblerOutput
 walnutAssemble(const char *source)
 {
@@ -56,6 +60,47 @@ walnutAssemble(const char *source)
     {
       switch (source[i])
         {
+        case 'l':
+          {
+            switch (source[i + 1])
+              {
+              case 'd':
+                {
+                  switch (source[i + 2])
+                    {
+                    case 'i':
+                      {
+                        uint64_t instr = (uint64_t)WalnutOpLdi << 56;
+                        i += 3;
+                        while (isspace(source[i]))
+                          {
+                            i++;
+                          }
+                        i++;
+                        char *end;
+                        uint8_t reg = strtoul(source + i, &end, 10);
+                        instr |= (uint64_t)reg << 48;
+                        i = end - source + 1;
+
+                        while (isspace(source[i]))
+                          {
+                            i++;
+                          }
+                        uint32_t val = strtoul(source + i, &end, 10);
+                        instr |= (uint64_t)val << 16;
+                        i = end - source;
+                        walnutAssemblerOutputPush(&output, instr);
+                        break;
+                      }
+                    }
+                  break;
+                }
+              }
+            break;
+          }
+        default:
+          i++;
+          break;
         }
     }
 

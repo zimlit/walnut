@@ -7,7 +7,7 @@
  * (at your option) any later version.
  *
  * walnut is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WArANTY; without even the implied waranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
@@ -35,28 +35,28 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
           {
             uint8_t reg  = WALNUT_FIRST_PARAM(code[i]);
             uint64_t val = WALNUT_IMMEDIATE(code[i]);
-            printf("ldi %u, %" PRIu64 "\n", reg, val);
+            printf("ldi r%u, %" PRIu64 "\n", reg, val);
             break;
           }
         case WalnutOpLda:
           {
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t addr = WALNUT_SECOND_PARAM(code[i]);
-            printf("lda %u, %u\n", dest, addr);
+            printf("lda r%u, r%u\n", dest, addr);
             break;
           }
         case WalnutOpLdr:
           {
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t src  = WALNUT_SECOND_PARAM(code[i]);
-            printf("ldr %d, %d\n", dest, src);
+            printf("ldr r%u, r%u\n", dest, src);
             break;
           }
         case WalnutOpSto:
           {
             uint8_t off = WALNUT_FIRST_PARAM(code[i]);
             uint8_t src = WALNUT_SECOND_PARAM(code[i]);
-            printf("sto %d, %d\n", off, src);
+            printf("sto r%u, r%u\n", off, src);
             break;
           }
         case WalnutOpAdd:
@@ -64,7 +64,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
             uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
             uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
-            printf("add %u, %u, %u\n", reg1, reg2, reg3);
+            printf("add r%u, r%u, r%u\n", reg1, reg2, reg3);
             break;
           }
         case WalnutOpSub:
@@ -72,7 +72,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
             uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
             uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
-            printf("sub %u, %u, %u\n", reg1, reg2, reg3);
+            printf("sub r%u, r%u, r%u\n", reg1, reg2, reg3);
             break;
           }
         case WalnutOpMul:
@@ -80,7 +80,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
             uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
             uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
-            printf("mul %u, %u, %u\n", reg1, reg2, reg3);
+            printf("mul r%u, r%u, r%u\n", reg1, reg2, reg3);
             break;
           }
         case WalnutOpDiv:
@@ -88,7 +88,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
             uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
             uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
-            printf("div %u, %u, %u\n", reg1, reg2, reg3);
+            printf("div r%u, r%u, r%u\n", reg1, reg2, reg3);
             break;
           }
         case WalnutOpMod:
@@ -96,7 +96,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t reg1 = WALNUT_FIRST_PARAM(code[i]);
             uint8_t reg2 = WALNUT_SECOND_PARAM(code[i]);
             uint8_t reg3 = WALNUT_THIRD_PARAM(code[i]);
-            printf("mod %u, %u, %u\n", reg1, reg2, reg3);
+            printf("mod r%u, r%u, r%u\n", reg1, reg2, reg3);
             break;
           }
         case WalnutOpLbs:
@@ -104,7 +104,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t src  = WALNUT_SECOND_PARAM(code[i]);
             uint8_t amm  = WALNUT_THIRD_PARAM(code[i]);
-            printf("lbs %d, %d, %d\n", dest, src, amm);
+            printf("lbs r%u, r%u, r%u\n", dest, src, amm);
             break;
           }
         case WalnutOpRbs:
@@ -112,7 +112,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t src  = WALNUT_SECOND_PARAM(code[i]);
             uint8_t amm  = WALNUT_THIRD_PARAM(code[i]);
-            printf("rbs %d, %d, %d\n", dest, src, amm);
+            printf("rbs r%u, r%u, r%u\n", dest, src, amm);
             break;
           }
         case WalnutOpAnd:
@@ -120,7 +120,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t op1  = WALNUT_SECOND_PARAM(code[i]);
             uint8_t op2  = WALNUT_THIRD_PARAM(code[i]);
-            printf("and %d, %d, %d\n", dest, op1, op2);
+            printf("and r%u, r%u, r%u\n", dest, op1, op2);
             break;
           }
         case WalnutOpBor:
@@ -128,7 +128,7 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t op1  = WALNUT_SECOND_PARAM(code[i]);
             uint8_t op2  = WALNUT_THIRD_PARAM(code[i]);
-            printf("bor %d, %d, %d\n", dest, op1, op2);
+            printf("bor r%u, r%u, r%u\n", dest, op1, op2);
             break;
           }
         case WalnutOpXor:
@@ -136,27 +136,27 @@ walnutDisassemble(uint64_t *code, size_t codeLen)
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t op1  = WALNUT_SECOND_PARAM(code[i]);
             uint8_t op2  = WALNUT_THIRD_PARAM(code[i]);
-            printf("xor %d, %d, %d\n", dest, op1, op2);
+            printf("xor r%u, r%u, r%u\n", dest, op1, op2);
             break;
           }
         case WalnutOpNot:
           {
             uint8_t dest = WALNUT_FIRST_PARAM(code[i]);
             uint8_t op1  = WALNUT_SECOND_PARAM(code[i]);
-            printf("not %d, %d\n", dest, op1);
+            printf("not r%u, r%u\n", dest, op1);
             break;
           }
         case WalnutOpJmp:
           {
             uint8_t addr = WALNUT_FIRST_PARAM(code[i]);
-            printf("jmp %d\n", addr);
+            printf("jmp r%u\n", addr);
             break;
           }
         case WalnutOpCmp:
           {
             uint8_t op1 = WALNUT_FIRST_PARAM(code[i]);
             uint8_t op2 = WALNUT_SECOND_PARAM(code[i]);
-            printf("cmp %d, %d\n", op1, op2);
+            printf("cmp r%u, r%u\n", op1, op2);
             break;
           }
         }
@@ -172,12 +172,12 @@ walnutDumpRegisterFile(Walnut *walnut)
       printf("\tWindow %2d {", wp);
       for (int i = 0; i < 16; i++)
         {
-          printf("r%d: %" PRIu64, i, walnut->registers[i + wp * 16]);
+          printf("r%u: %" PRIu64, i, walnut->registers[i + wp * 16]);
           if (i != 15)
             printf(", ");
         }
       printf("}\n");
     }
   printf("}\n");
-  printf("Flags: %d\n", walnut->flags);
+  printf("Flags: %u\n", walnut->flags);
 }

@@ -23,6 +23,6 @@ typedef struct
   size_t cap;
 } WalnutAssemblerOutput;
 
-void walnutAssemblerOutputPush(WalnutAssemblerOutput *output, uint64_t item);
+void walnutAssemblerOutputFree(WalnutAssemblerOutput *output);
 
 WalnutAssemblerOutput walnutAssemble(const char *source);
