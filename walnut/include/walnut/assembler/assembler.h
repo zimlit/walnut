@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with walnut. If not, see <http://www.gnu.org/licenses/>.
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -21,6 +22,7 @@ typedef struct
   uint64_t *data;
   size_t len;
   size_t cap;
+  bool hadError;
 } WalnutAssemblerOutput;
 
 void walnutAssemblerOutputFree(WalnutAssemblerOutput *output);

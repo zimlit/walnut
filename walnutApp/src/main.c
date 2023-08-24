@@ -125,6 +125,10 @@ main(int argc, const char **argv)
         }
       char *file                   = readTextFile(argv[2]);
       WalnutAssemblerOutput output = walnutAssemble(file);
+      if (output.hadError)
+        {
+          return EXIT_FAILURE;
+        }
       printf("%016lx\n%016lx\n", output.data[0], output.data[1]);
       walnutAssemblerOutputFree(&output);
     }
