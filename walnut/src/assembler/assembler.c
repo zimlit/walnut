@@ -15,98 +15,11 @@
  * along with walnut. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <walnut/assembler/assembler.h>
+#include <walnut/assembler/lexer.h>
 #include <walnut/opcode.h>
-
-typedef enum
-{
-  TOKEN_HLT,
-  TOKEN_LDI,
-
-  TOKEN_REG,
-  TOKEN_NUMBER,
-  TOKEN_COMMA,
-
-  TOKEN_ERROR,
-  TOKEN_EOF,
-} TokenType;
-
-typedef struct
-{
-  TokenType type;
-  int line;
-  int col;
-  char *start;
-  char *end;
-} Token;
-
-typedef struct
-{
-  int line;
-  int col;
-  int pos;
-  const char *source;
-} Lexer;
-
-void
-initLexer(Lexer *lexer, const char *source)
-{
-  lexer->line   = 1;
-  lexer->col    = 1;
-  lexer->pos    = 0;
-  lexer->source = source;
-}
-
-Token
-lexToken(Lexer *lexer)
-{
-  Token tok;
-  tok.line = lexer->line;
-  tok.col  = lexer->col;
-  while (isspace(lexer->source[lexer->pos]))
-    {
-      lexer->pos++;
-      lexer->col++;
-      if (lexer->source[lexer->pos] == '\n')
-        {
-          lexer->line++;
-          lexer->col = 0;
-        }
-    }
-
-  char c = lexer->source[lexer->pos];
-  if (c == ',')
-    {
-      tok.type  = TOKEN_COMMA;
-      tok.start = lexer->source + lexer->pos;
-      tok.end   = tok.start;
-      lexer->pos++;
-      lexer->col++;
-      return tok;
-    }
-  else if (c == '\0')
-    {
-      tok.type  = TOKEN_EOF;
-      tok.start = lexer->source + lexer->pos;
-      tok.end   = tok.start;
-      lexer->pos++;
-      lexer->col++;
-    }
-  else
-    {
-      // TODO log error
-      tok.type  = TOKEN_ERROR;
-      tok.start = lexer->source + lexer->pos;
-      tok.end   = tok.start;
-      lexer->pos++;
-      lexer->col++;
-    }
-
-  return tok;
-}
 
 void
 walnutAssemblerOutputInit(WalnutAssemblerOutput *output)
@@ -137,10 +50,24 @@ walnutAssemblerOutputFree(WalnutAssemblerOutput *output)
 }
 
 WalnutAssemblerOutput
-walnutAssemble(const char *source)
+walnutAssemble(char *source)
 {
   WalnutAssemblerOutput output;
   walnutAssemblerOutputInit(&output);
+
+  WalnutLexer lexer;
+  walnutInitLexer(&lexer, source);
+  WalnutToken tok = walnutLexToken(&lexer);
+  while (tok.type != WALNUT_TOKEN_EOF)
+    {
+      printf("%d {\n"
+             "  at: %d:%d\n"
+             "  lexeme: %d-%d\n"
+             "}\n",
+             tok.type, tok.line, tok.col, (int)(tok.start - source),
+             (int)(tok.end - source));
+      tok = walnutLexToken(&lexer);
+    }
 
   return output;
 }

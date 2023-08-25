@@ -2,6 +2,7 @@ add_library(
     walnut src/walnut.c include/walnut/walnut.h src/mem.c include/walnut/mem.h
            src/debug.c include/walnut/debug.h include/walnut/decode.h
            src/assembler/assembler.c include/walnut/assembler/assembler.h
+           src/assembler/lexer.c include/walnut/assembler/lexer.h
            include/walnut/opcode.h
 )
 

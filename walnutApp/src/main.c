@@ -129,7 +129,6 @@ main(int argc, const char **argv)
         {
           return EXIT_FAILURE;
         }
-      printf("%016lx\n%016lx\n", output.data[0], output.data[1]);
       walnutAssemblerOutputFree(&output);
     }
   else

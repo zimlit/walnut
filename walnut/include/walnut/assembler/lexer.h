@@ -13,18 +13,35 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with walnut. If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+typedef enum
+{
+  WALNUT_TOKEN_HLT,
+  WALNUT_TOKEN_LDI,
+
+  WALNUT_TOKEN_REG,
+  WALNUT_TOKEN_NUMBER,
+  WALNUT_TOKEN_COMMA,
+
+  WALNUT_TOKEN_ERROR,
+  WALNUT_TOKEN_EOF,
+} WalnutTokenType;
 
 typedef struct
 {
-  uint64_t *data;
-  size_t len;
-  size_t cap;
-  bool hadError;
-} WalnutAssemblerOutput;
+  WalnutTokenType type;
+  int line;
+  int col;
+  char *start;
+  char *end;
+} WalnutToken;
 
-void walnutAssemblerOutputFree(WalnutAssemblerOutput *output);
+typedef struct
+{
+  int line;
+  int col;
+  int pos;
+  char *source;
+} WalnutLexer;
 
-WalnutAssemblerOutput walnutAssemble(char *source);
+void walnutInitLexer(WalnutLexer *lexer, char *source);
+WalnutToken walnutLexToken(WalnutLexer *lexer);
