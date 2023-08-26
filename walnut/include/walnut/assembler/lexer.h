@@ -32,7 +32,7 @@ typedef struct
   int line;
   int col;
   char *start;
-  char *end;
+  int length;
 } WalnutToken;
 
 typedef struct

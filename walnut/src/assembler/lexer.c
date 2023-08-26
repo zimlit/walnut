@@ -27,12 +27,9 @@ walnutInitLexer(WalnutLexer *lexer, char *source)
   lexer->source = source;
 }
 
-WalnutToken
-walnutLexToken(WalnutLexer *lexer)
+void
+skipWhitespace(WalnutLexer *lexer)
 {
-  WalnutToken tok;
-  tok.line = lexer->line;
-  tok.col  = lexer->col;
   while (isspace(lexer->source[lexer->pos]))
     {
       lexer->pos++;
@@ -43,34 +40,59 @@ walnutLexToken(WalnutLexer *lexer)
           lexer->col = 0;
         }
     }
+}
+
+void
+number(WalnutLexer *lexer, WalnutToken *tok)
+{
+  int len = 1;
+  while (isdigit(lexer->source[lexer->pos]))
+    {
+      lexer->pos++;
+      lexer->col++;
+      len++;
+    }
+
+  tok->type   = WALNUT_TOKEN_NUMBER;
+  tok->length = len;
+}
+
+WalnutToken
+walnutLexToken(WalnutLexer *lexer)
+{
+  skipWhitespace(lexer);
+  WalnutToken tok;
+  tok.line  = lexer->line;
+  tok.col   = lexer->col;
+  tok.start = lexer->source + lexer->pos;
 
   char c = lexer->source[lexer->pos];
   if (c == ',')
     {
-      tok.type  = WALNUT_TOKEN_COMMA;
-      tok.start = lexer->source + lexer->pos;
-      tok.end   = tok.start;
+      tok.type   = WALNUT_TOKEN_COMMA;
+      tok.length = 1;
       lexer->pos++;
       lexer->col++;
       return tok;
     }
-  else if (c == '\0')
+  if (c == '\0')
     {
-      tok.type  = WALNUT_TOKEN_EOF;
-      tok.start = lexer->source + lexer->pos;
-      tok.end   = tok.start;
+      tok.type   = WALNUT_TOKEN_EOF;
+      tok.length = 1;
       lexer->pos++;
       lexer->col++;
+      return tok;
     }
-  else
+  if (isdigit(c))
     {
-      // TODO log error
-      tok.type  = WALNUT_TOKEN_ERROR;
-      tok.start = lexer->source + lexer->pos;
-      tok.end   = tok.start;
-      lexer->pos++;
-      lexer->col++;
+      number(lexer, &tok);
+      return tok;
     }
+  // TODO log error
+  tok.type   = WALNUT_TOKEN_ERROR;
+  tok.length = 1;
+  lexer->pos++;
+  lexer->col++;
 
   return tok;
 }

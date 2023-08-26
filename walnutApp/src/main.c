@@ -38,7 +38,7 @@ readfile(const char *fileName)
       exit(EXIT_FAILURE);
     }
   fseek(fd, 0, SEEK_END);
-  long len = ftell(fd);
+  size_t len = ftell(fd);
   rewind(fd);
 
   File file;
@@ -60,7 +60,7 @@ readfile(const char *fileName)
           exit(EXIT_FAILURE);
         }
       fread(temp, 1, len, fd);
-      for (int i = 0; i < len / 8; i++)
+      for (size_t i = 0; i < len / 8; i++)
         {
           file.contents[i] = (uint64_t)temp[i * 8 + 7]
                              | (uint64_t)temp[i * 8 + 6] << 8
@@ -92,7 +92,7 @@ readTextFile(const char *fileName)
       exit(EXIT_FAILURE);
     }
   fseek(fd, 0, SEEK_END);
-  long len = ftell(fd);
+  size_t len = ftell(fd);
   rewind(fd);
 
   char *contents = malloc(len + 1);
@@ -101,7 +101,12 @@ readTextFile(const char *fileName)
       fprintf(stderr, "ERROR: cannot allocate space for file\n");
       exit(EXIT_FAILURE);
     }
-  fread(contents, 1, len, fd);
+  size_t bytes_read = fread(contents, 1, len, fd);
+  if (bytes_read < len)
+    {
+      fprintf(stderr, "ERROR: failed to read file\n");
+      exit(EXIT_FAILURE);
+    }
 
   fclose(fd);
   contents[len] = '\0';
@@ -130,6 +135,7 @@ main(int argc, const char **argv)
           return EXIT_FAILURE;
         }
       walnutAssemblerOutputFree(&output);
+      free(file);
     }
   else
     {

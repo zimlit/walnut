@@ -60,12 +60,8 @@ walnutAssemble(char *source)
   WalnutToken tok = walnutLexToken(&lexer);
   while (tok.type != WALNUT_TOKEN_EOF)
     {
-      printf("%d {\n"
-             "  at: %d:%d\n"
-             "  lexeme: %d-%d\n"
-             "}\n",
-             tok.type, tok.line, tok.col, (int)(tok.start - source),
-             (int)(tok.end - source));
+      printf("%d:%d %d '%.*s'\n", tok.line, tok.col, tok.type, tok.length,
+             tok.start);
       tok = walnutLexToken(&lexer);
     }
 
