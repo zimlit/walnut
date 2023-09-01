@@ -57,6 +57,27 @@ number(WalnutLexer *lexer, WalnutToken *tok)
   tok->length = len;
 }
 
+void
+reg(WalnutLexer *lexer, WalnutToken *tok)
+{
+  if (!isdigit(lexer->source[lexer->pos + 1]))
+    {
+      return;
+    }
+  lexer->pos++;
+  lexer->col++;
+  int len = 1;
+  while (isdigit(lexer->source[lexer->pos]))
+    {
+      lexer->pos++;
+      lexer->col++;
+      len++;
+    }
+
+  tok->type   = WALNUT_TOKEN_REG;
+  tok->length = len;
+}
+
 WalnutToken
 walnutLexToken(WalnutLexer *lexer)
 {
@@ -86,6 +107,11 @@ walnutLexToken(WalnutLexer *lexer)
   if (isdigit(c))
     {
       number(lexer, &tok);
+      return tok;
+    }
+  if (c == 'r')
+    {
+      reg(lexer, &tok);
       return tok;
     }
   // TODO log error
