@@ -11,5 +11,6 @@
         "string_view": "c",
         "span": "c"
     },
-    "licenser.license": "LGPLv3"
+    "licenser.license": "LGPLv3",
+    "cmake.configureOnOpen": false
 }
