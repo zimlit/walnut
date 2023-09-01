@@ -16,6 +16,7 @@
  */
 
 #include <ctype.h>
+#include <stdio.h>
 #include <walnut/assembler/lexer.h>
 
 void
@@ -32,20 +33,20 @@ skipWhitespace(WalnutLexer *lexer)
 {
   while (isspace(lexer->source[lexer->pos]))
     {
-      lexer->pos++;
-      lexer->col++;
       if (lexer->source[lexer->pos] == '\n')
         {
           lexer->line++;
           lexer->col = 0;
         }
+      lexer->pos++;
+      lexer->col++;
     }
 }
 
 void
 number(WalnutLexer *lexer, WalnutToken *tok)
 {
-  int len = 1;
+  int len = 0;
   while (isdigit(lexer->source[lexer->pos]))
     {
       lexer->pos++;
@@ -57,24 +58,92 @@ number(WalnutLexer *lexer, WalnutToken *tok)
   tok->length = len;
 }
 
-void
-reg(WalnutLexer *lexer, WalnutToken *tok)
+WalnutTokenType
+identifierType(WalnutLexer *lexer)
 {
-  if (!isdigit(lexer->source[lexer->pos + 1]))
+  switch (lexer->source[lexer->pos])
     {
-      return;
+    case 'r':
+      {
+        lexer->pos++;
+        lexer->col++;
+        while (isdigit(lexer->source[lexer->pos]))
+          {
+            lexer->pos++;
+            lexer->col++;
+          }
+        int eon = lexer->pos;
+        while (isalpha(lexer->source[lexer->pos])
+               || isdigit(lexer->source[lexer->pos])
+               || lexer->source[lexer->pos] == '_')
+          {
+            lexer->pos++;
+            lexer->col++;
+          }
+        if (eon == lexer->pos)
+          {
+            return WALNUT_TOKEN_REG;
+          }
+        break;
+      }
+    case 'l':
+      {
+        lexer->pos++;
+        lexer->col++;
+        if (lexer->source[lexer->pos] == 'd')
+          {
+            lexer->pos++;
+            lexer->col++;
+            if (lexer->source[lexer->pos] == 'i')
+              {
+                lexer->pos++;
+                lexer->col++;
+                return WALNUT_TOKEN_LDI;
+              }
+          }
+        break;
+      }
+    case 'h':
+      {
+        lexer->pos++;
+        lexer->col++;
+        if (lexer->source[lexer->pos] == 'l')
+          {
+            lexer->pos++;
+            lexer->col++;
+            if (lexer->source[lexer->pos] == 't')
+              {
+                lexer->pos++;
+                lexer->col++;
+                return WALNUT_TOKEN_LDI;
+              }
+          }
+        break;
+      }
     }
-  lexer->pos++;
-  lexer->col++;
-  int len = 1;
-  while (isdigit(lexer->source[lexer->pos]))
+  while (isalpha(lexer->source[lexer->pos])
+         || isdigit(lexer->source[lexer->pos])
+         || lexer->source[lexer->pos] == '_')
     {
       lexer->pos++;
       lexer->col++;
+    }
+  return WALNUT_TOKEN_IDENTIFIER;
+}
+
+void
+identifier(WalnutLexer *lexer, WalnutToken *tok)
+{
+  int len = 0;
+  while (isalpha(lexer->source[lexer->pos])
+         || isdigit(lexer->source[lexer->pos])
+         || lexer->source[lexer->pos] == '_')
+    {
+      lexer->pos++;
       len++;
     }
-
-  tok->type   = WALNUT_TOKEN_REG;
+  lexer->pos -= len;
+  tok->type   = identifierType(lexer);
   tok->length = len;
 }
 
@@ -109,9 +178,14 @@ walnutLexToken(WalnutLexer *lexer)
       number(lexer, &tok);
       return tok;
     }
-  if (c == 'r')
+  // if (c == 'r')
+  //   {
+  //     reg(lexer, &tok);
+  //     return tok;
+  //   }
+  if (isalpha(c) || c == '_')
     {
-      reg(lexer, &tok);
+      identifier(lexer, &tok);
       return tok;
     }
   // TODO log error
