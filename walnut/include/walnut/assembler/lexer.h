@@ -12,11 +12,40 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with walnut. If not, see <http://www.gnu.org/licenses/>.
+#ifndef WALNUT_LEXER_H
+#define WALNUT_LEXER_H
 
 typedef enum
 {
   WALNUT_TOKEN_HLT,
   WALNUT_TOKEN_LDI,
+  WALNUT_TOKEN_LDA,
+  WALNUT_TOKEN_LDR,
+  WALNUT_TOKEN_STO,
+  WALNUT_TOKEN_ADD,
+  WALNUT_TOKEN_SUB,
+  WALNUT_TOKEN_MUL,
+  WALNUT_TOKEN_DIV,
+  WALNUT_TOKEN_MOD,
+  WALNUT_TOKE_LBS,
+  WALNUT_TOKEN_RBS,
+  WALNUT_TOKEN_AND,
+  WALNUT_TOKEN_BOR,
+  WALNUT_TOKEN_XOR,
+  WALNUT_TOKEN_NOT,
+  WALNUT_TOKEN_JMP,
+  WALNUT_TOKEN_JEQ,
+  WALNUT_TOKEN_JNE,
+  WALNUT_TOKEN_JGT,
+  WALNUT_TOKEN_JLT,
+  WALNUT_TOKEN_JGE,
+  WALNUT_TOKEN_JLE,
+  WALNUT_TOKEN_CMP,
+  WALNUT_TOKEN_BRK,
+  WALNUT_TOKEN_IWP,
+  WALNUT_TOKEN_DWP,
+  WALNUT_TOKEN_JSR,
+  WALNUT_TOKEN_RET,
 
   WALNUT_TOKEN_REG,
   WALNUT_TOKEN_NUMBER,
@@ -46,3 +75,5 @@ typedef struct
 
 void walnutInitLexer(WalnutLexer *lexer, char *source);
 WalnutToken walnutLexToken(WalnutLexer *lexer);
+
+#endif
